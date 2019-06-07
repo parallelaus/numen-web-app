@@ -1,0 +1,16 @@
+{
+  "name": "numen-installer",
+  "scripts": {
+    "dev": "nuxt"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.5.4",
+    "nuxt": "^2.8.1",
+    "vuetify-loader": "^1.2.2"
+  },
+  "devDependencies": {
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vuetify": "^1.5.14"
+  }
+}
