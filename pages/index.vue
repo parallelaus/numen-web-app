@@ -42,6 +42,10 @@
     data: () => ({
       reviews: 413,
       value: 4.5
-    })
+    }),
+    mounted() {
+      // Load the all system options
+      this.$store.dispatch('types/fetchAll')
+    }
   }
 </script>

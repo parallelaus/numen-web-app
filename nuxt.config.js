@@ -24,9 +24,9 @@ export default {
 
   css: ['~/assets/style/app.styl'],
 
-  plugins: ['@/plugins/vuetify.js'],
+  plugins: ['@/plugins/vuetify', '@/plugins/api'],
 
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/dotenv'],
 
   axios: {},
 
