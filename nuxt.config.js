@@ -7,9 +7,9 @@ export default {
   head: {
     title: 'Numen Installer',
     meta: [
-      {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: pkg.description}
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
       {
@@ -20,7 +20,7 @@ export default {
     ]
   },
 
-  loading: {color: '#BDBDBD', height: '3px'},
+  loading: { color: '#BDBDBD', height: '3px' },
 
   css: ['~/assets/style/app.styl'],
 

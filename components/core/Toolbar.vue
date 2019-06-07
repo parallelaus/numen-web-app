@@ -1,11 +1,9 @@
 <template>
-    <div>
-        TOOLBAR
-    </div>
+  <div>
+    TOOLBAR
+  </div>
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {}
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <v-hover>
+  <v-hover>
     <v-card
       slot-scope="{ hover }"
       :class="`elevation-${hover ? 12 : 2}`"
@@ -7,9 +7,9 @@
       width="344"
     >
       <v-img
-        :aspect-ratio="16/9"
+        :aspect-ratio="16 / 9"
         src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-      ></v-img>
+      />
       <v-card-title>
         <div>
           <span class="headline">Cafe Badilico</span>
@@ -21,14 +21,14 @@
               half-increments
               readonly
               size="14"
-            ></v-rating>
+            />
             <div class="ml-2 grey--text text--darken-2">
               <span>{{ value }}</span>
               <span>({{ reviews }})</span>
             </div>
           </div>
         </div>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn icon class="mr-0">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
@@ -38,14 +38,14 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      reviews: 413,
-      value: 4.5
-    }),
-    mounted() {
-      // Load the all system options
-      this.$store.dispatch('types/fetchAll')
-    }
+export default {
+  data: () => ({
+    reviews: 413,
+    value: 4.5
+  }),
+  mounted() {
+    // Load the all system options
+    this.$store.dispatch('types/fetchAll')
   }
+}
 </script>

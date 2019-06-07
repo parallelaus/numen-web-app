@@ -1,15 +1,15 @@
 <template>
-<div>
+  <div>
     <Toolbar />
     <nuxt />
-</div>
+  </div>
 </template>
 
 <script>
 import Toolbar from '~/components/core/Toolbar'
 export default {
-    components: {
-        Toolbar
-    }
+  components: {
+    Toolbar
+  }
 }
 </script>
