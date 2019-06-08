@@ -12,6 +12,7 @@ export default {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/64_favicon.ico' },
       {
         rel: 'stylesheet',
         href:
@@ -24,7 +25,7 @@ export default {
 
   css: ['~/assets/style/app.styl'],
 
-  plugins: ['@/plugins/vuetify', '@/plugins/api'],
+  plugins: ['@/plugins/vuetify', '@/plugins/api', '@/plugins/vuelidate'],
 
   modules: ['@nuxtjs/axios', '@nuxtjs/dotenv'],
 
