@@ -21,11 +21,16 @@ export default {
     ]
   },
 
-  loading: { color: '#BDBDBD', height: '3px' },
+  loading: {
+    color: '#BDBDBD',
+    height: '3px',
+    continuous: true,
+    duration: 6000
+  },
 
   css: ['~/assets/style/app.styl'],
 
-  plugins: ['@/plugins/vuetify', '@/plugins/api', '@/plugins/vuelidate'],
+  plugins: ['@/plugins/vuetify', '@/plugins/api'],
 
   modules: ['@nuxtjs/axios', '@nuxtjs/dotenv'],
 

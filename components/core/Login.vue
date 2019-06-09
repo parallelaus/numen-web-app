@@ -10,34 +10,25 @@
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form>
+              <v-form ref="form">
                 <v-text-field
-                  v-model="username"
+                  v-model="credentials.username"
+                  :rules="usernameRequired"
                   prepend-icon="person"
-                  name="username"
-                  label="Username"
-                  type="text"
-                  :error-messages="usernameErrors"
-                  required
-                  @input="$v.username.$touch()"
-                  @blur="$v.username.$touch()"
+                  label="Email Address"
                 />
                 <v-text-field
-                  v-model="password"
+                  v-model="credentials.password"
+                  :rules="passwordRequired"
                   prepend-icon="lock"
-                  name="password"
                   label="Password"
                   type="password"
-                  :error-messages="passwordErrors"
-                  required
-                  @input="$v.password.$touch()"
-                  @blur="$v.password.$touch()"
                 />
               </v-form>
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" @click="submit">
+              <v-btn color="primary" :loading="loading" @click="submit">
                 Login
               </v-btn>
             </v-card-actions>
@@ -49,48 +40,22 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
 export default {
-  data() {
-    return {
+  data: () => ({
+    credentials: {
       username: '',
       password: ''
-    }
-  },
-  validations: {
-    username: {
-      required
     },
-    password: {
-      required
-    }
-  },
-  computed: {
-    usernameErrors() {
-      const errors = []
-      if (this.$v.username === undefined || !this.$v.username.$dirty) {
-        return errors
-      }
-      !this.$v.username.required && errors.push('Username is required')
-      return errors
-    },
-    passwordErrors() {
-      const errors = []
-      if (this.$v.password === undefined || !this.$v.password.$dirty) {
-        return errors
-      }
-      !this.$v.password.required && errors.push('Password is required')
-      return errors
-    }
-  },
+    usernameRequired: [v => v.length > 0 || 'Please enter your email address'],
+    passwordRequired: [v => v.length > 0 || 'Please enter your password'],
+    loading: false
+  }),
   methods: {
     async submit() {
-      this.$v.$touch()
-      if (!this.$v.$invalid) {
-        await this.$store.dispatch('user/login', {
-          username: this.username,
-          password: this.password
-        })
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        await this.$store.dispatch('user/login', this.credentials)
+        this.loading = false
       }
     }
   }

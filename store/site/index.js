@@ -17,6 +17,15 @@ export const mutations = {
     state.switchboards = config.switchboards
     state.circuits = config.circuits
     state.devices = config.devices
+  },
+  ADD_BUILDING(state, building) {
+    state.buildings.push(building)
+  },
+  DELETE_BUILDING(state, building_id) {
+    const idx = state.buildings.findIndex(
+      building => building.id === building_id
+    )
+    state.buildings.splice(idx, 1)
   }
 }
 
@@ -29,6 +38,16 @@ export const actions = {
   async fetchSiteConfig({ commit }, id) {
     const response = await this.$siteConfig.fetch(id)
     commit('SET_SITE_CONFIG', response)
+  },
+
+  async addBuilding({ commit, state }, building) {
+    const response = await this.$siteConfig.addBuilding(state.site.id, building)
+    commit('ADD_BUILDING', response.building)
+  },
+
+  async deleteBuilding({ commit }, building_id) {
+    await this.$building.delete(building_id)
+    commit('DELETE_BUILDING', building_id)
   }
 }
 

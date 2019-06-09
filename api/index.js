@@ -11,15 +11,15 @@ export default $axios => resource => ({
     return $axios.$get(`${process.env.API_URL}/${resource}`)
   },
   show(id) {
-    return $axios.$get(`${resource}/${id}`)
+    return $axios.$get(`${process.env.API_URL}/${resource}/${id}`)
   },
   create(payload) {
-    return $axios.$post(`${resource}`, payload)
+    return $axios.$post(`${process.env.API_URL}/${resource}`, payload)
   },
   update(id, payload) {
-    return $axios.$put(`${resource}/${id}`, payload)
+    return $axios.$put(`${process.env.API_URL}/${resource}/${id}`, payload)
   },
   delete(id) {
-    return $axios.$delete(`${resource}/${id}`)
+    return $axios.$delete(`${process.env.API_URL}/${resource}/${id}`)
   }
 })

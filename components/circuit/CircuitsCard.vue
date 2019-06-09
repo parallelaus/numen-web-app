@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-card v-for="circuit in circuits" :key="circuit.id" class="ml-3 mb-1">
+    <v-card
+      v-for="circuit in circuits"
+      :key="circuit.id"
+      class="ml-3 mb-1"
+      color="green lighten-4"
+    >
       <v-card-title class="subheading font-weight-bold">
         {{ circuit.name }}
         <span v-if="$store.state.techMode" class="caption font-weight-thin">
