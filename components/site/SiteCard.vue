@@ -2,7 +2,11 @@
   <v-flex xs12>
     <nuxt-link :to="'/site/' + site.id" tag="div">
       <v-hover>
-        <v-card>
+        <v-card
+          slot-scope="{ hover }"
+          :class="`elevation-${hover ? 6 : 2}`"
+          nuxt
+        >
           <v-card-title>
             <p class="caption pa-0 ma-0">
               <span class="title font-weight-bold">{{ site.name }}</span>

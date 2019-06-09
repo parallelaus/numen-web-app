@@ -8,10 +8,16 @@
     </v-tab>
     <v-tab-item v-for="building in buildings" :key="building.id">
       <v-layout column>
-        <v-flex xs12>
+        <v-flex xs12 class="text-xs-right">
+          <SwitchboardForm :building="building" />
+        </v-flex>
+        <v-flex>
           <BuildingElectrical :building="building" />
         </v-flex>
-        <v-flex xs12 text-xs-right>
+        <v-flex text-xs-right>
+          <v-btn small outline color="primary">
+            Edit {{ building.name }}
+          </v-btn>
           <v-btn small outline color="error">
             Delete {{ building.name }}
           </v-btn>
@@ -22,11 +28,13 @@
 </template>
 
 <script>
-import BuildingElectrical from '@/components/building/BuildingElectrical.vue'
+import BuildingElectrical from '@/components/building/BuildingElectrical'
+import SwitchboardForm from '@/components/switchboard/SwitchboardForm'
 
 export default {
   components: {
-    BuildingElectrical
+    BuildingElectrical,
+    SwitchboardForm
   },
   props: {
     // eslint-disable-next-line vue/require-default-prop

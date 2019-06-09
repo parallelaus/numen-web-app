@@ -38,6 +38,11 @@
       </v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
+        <v-btn icon @click="toggleTechMode">
+          <v-icon :class="techModeClass" small class="white--text">
+            build
+          </v-icon>
+        </v-btn>
         <v-btn icon @click="logout">
           <v-icon>
             exit_to_app
@@ -63,7 +68,7 @@ export default {
   computed: {
     techModeClass() {
       return {
-        'grey--text text--lighten-3': !this.$store.state.techMode
+        'grey--text darken-2': !this.$store.state.techMode
       }
     }
   },

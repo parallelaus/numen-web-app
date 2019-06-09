@@ -1,5 +1,5 @@
 <template>
-  <v-card color="blue lighten-4" class="text-xs-left" flat>
+  <v-card color="blue lighten-4" class="text-xs-left mr-3">
     <v-card-title class="subheading font-weight-bold">
       <div width="100%">
         {{ device.name }}

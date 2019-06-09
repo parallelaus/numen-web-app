@@ -2,51 +2,30 @@
   <v-dialog v-model="dialog" persistent max-width="600px">
     <template v-slot:activator="{ on }">
       <v-btn color="primary" outline small v-on="on">
-        Add Building to {{ site.name }}
+        Add Switchboard to {{ building.name }}
       </v-btn>
     </template>
     <v-card>
       <v-card-title>
-        <span class="headline">Add a new building to {{ site.name }}</span>
+        <span class="headline">Add switchboard to {{ building.name }}</span>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
           <v-layout column>
             <v-flex xs12>
               <v-text-field
-                v-model="building.name"
-                label="Building Name*"
+                v-model="switchboard.name"
+                label="Switchboard Name*"
                 required
               />
             </v-flex>
             <v-flex>
               <v-textarea
-                v-model="building.description"
+                v-model="switchboard.description"
                 label="Description"
                 required
                 rows="2"
                 auto-grow
-              />
-            </v-flex>
-
-            <v-flex>
-              <v-textarea
-                v-model="building.address"
-                :value="site.address"
-                label="Address*"
-                required
-                rows="3"
-                auto-grow
-              />
-            </v-flex>
-            <v-flex>
-              <v-select
-                v-model="building.building_type_id"
-                :items="buildingTypes"
-                item-text="label"
-                item-value="id"
-                label="Building Type*"
-                required
               />
             </v-flex>
           </v-layout>
@@ -56,14 +35,14 @@
         </span>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="error" flat @click="deleteBuilding">
+        <v-btn color="error" flat @click="deleteSwitchboard">
           Delete
         </v-btn>
         <v-spacer />
         <v-btn color="primary" flat @click="dialog = false">
           Close
         </v-btn>
-        <v-btn color="primary" flat @click="addUpdateBuilding">
+        <v-btn color="primary" flat @click="addUpdateSwitchboard">
           Save
         </v-btn>
       </v-card-actions>
@@ -72,45 +51,42 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
-    site: Object
+    building: Object
   },
   data: () => ({
     dialog: false,
-    building: {
+    switchboard: {
       name: '',
       description: '',
-      address: '',
-      building_type_id: null
+      location: ''
     }
   }),
   validations: {
-    building: {
-      name: { required },
-      address: { required },
-      building_type_id: { required }
+    switchboard: {
+      name: { required }
     }
   },
-  computed: {
-    ...mapState({
-      buildingTypes: state => state.types.building_types
-    })
-  },
+  // computed: {
+  //   ...mapState({
+  //     buildingTypes: state => state.types.building_types
+  //   })
+  // },
   methods: {
-    async addUpdateBuilding() {
+    async addUpdateSwitchboard() {
       this.$v.$touch()
-      if (!this.$v.$invalif) {
-        console.log('Submit Building')
+      if (!this.$v.$invalid) {
+        console.log('Submit Switchboard')
       } else {
         console.log('Form invalid')
       }
     },
-    async deleteBuilding() {
-      console.log('Delete Building' + this.building.id)
+    async deleteSwitchboard() {
+      console.log('Delete Switchboard')
     }
   }
 }

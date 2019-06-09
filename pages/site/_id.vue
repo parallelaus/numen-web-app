@@ -2,18 +2,25 @@
   <v-container fluid>
     <v-layout column>
       <v-flex xs12>
-        <span>
-          <span class="display-2 font-weight-bold">{{ site.name }}</span>
-          <span v-if="$store.state.techMode" class="caption font-weight-thin">
-            &nbsp;(ID: {{ site.id }})
-          </span>
-          <p>{{ site.address }}</p>
-        </span>
+        <v-layout row align-end>
+          <v-flex xs6>
+            <span>
+              <span class="display-1 font-weight-bold">{{ site.name }}</span>
+              <span
+                v-if="$store.state.techMode"
+                class="caption font-weight-thin"
+              >
+                &nbsp;(ID: {{ site.id }})
+              </span>
+              <p>{{ site.address }}</p>
+            </span>
+          </v-flex>
+          <v-flex xs6 text-xs-right>
+            <BuildingForm :site="site" />
+          </v-flex>
+        </v-layout>
       </v-flex>
-      <v-flex xs12 pa-0 text-xs-right>
-        <BuildingForm :site="site" />
-      </v-flex>
-      <v-flex pa-0>
+      <v-flex>
         <BuildingTabs :buildings="buildings" />
       </v-flex>
     </v-layout>
@@ -35,9 +42,6 @@ export default {
     BuildingTabs,
     BuildingForm
   },
-  async fetch({ store, params }) {
-    await store.dispatch('site/fetchSiteConfig', params.id)
-  },
   computed: {
     site() {
       return this.fetchSite(this.$route.params.id)
@@ -46,6 +50,9 @@ export default {
       fetchSite: 'site/site',
       buildings: 'site/buildings'
     })
+  },
+  async fetch({ store, params }) {
+    await store.dispatch('site/fetchSiteConfig', params.id)
   }
 }
 </script>
