@@ -3,7 +3,7 @@
     <v-card
       v-for="circuit in circuits"
       :key="circuit.id"
-      class="ml-3 mb-1"
+      class="ml-3"
       color="green lighten-4"
     >
       <v-card-title class="subheading font-weight-bold">

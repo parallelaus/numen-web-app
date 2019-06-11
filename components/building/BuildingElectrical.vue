@@ -16,7 +16,7 @@
             {{ switchboard.description }}
           </p>
         </div>
-        <div class="text-xs-right">
+        <div class="text-xs-right mr-2">
           <v-menu offset-y>
             <v-btn slot="activator" color="primary" outline small>
               Add Device to {{ switchboard.name }}
@@ -32,7 +32,7 @@
             </v-list>
           </v-menu>
         </div>
-        <v-container fluid grid-list-md pa-0>
+        <v-container fluid grid-list-md pa-0 pb-3>
           <v-layout column>
             <v-flex
               v-for="(device, idx) in devices(switchboard.id)"
@@ -57,6 +57,7 @@
               <v-divider
                 v-if="idx + 1 < devices(switchboard.id).length"
                 :key="idx"
+                class="mt-1"
               />
             </v-flex>
           </v-layout>

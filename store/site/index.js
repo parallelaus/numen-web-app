@@ -85,7 +85,9 @@ export const getters = {
         devices.add(element.devices[0])
       }
     })
-    return state.devices.filter(device => devices.has(device.id))
+    return state.devices
+      .filter(device => devices.has(device.id))
+      .sort(sortByLoadType)
   },
 
   circuitsByDevice: state => device_id => {
@@ -96,4 +98,8 @@ export const getters = {
       deviceCircuitsIds.includes(circuit.id)
     )
   }
+}
+
+function sortByLoadType(a, b) {
+  return a.load_type_id - b.load_type_id
 }

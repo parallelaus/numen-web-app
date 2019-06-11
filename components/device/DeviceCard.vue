@@ -1,5 +1,5 @@
 <template>
-  <v-card color="blue lighten-4" class="text-xs-left mr-3">
+  <v-card :color="deviceTypeColor" class="text-xs-left mr-3">
     <v-card-title class="subheading font-weight-bold">
       <div width="100%">
         {{ device.name }}
@@ -63,6 +63,17 @@ export default {
   computed: {
     supplyType() {
       return this.device['3ph_load'] == 1 ? 'Three Phase' : 'Single Phase'
+    },
+    deviceTypeColor() {
+      switch (this.device.load_type_id) {
+        case 1:
+        case 3:
+        case 4:
+          // Incomming Supply Circuits
+          return 'blue lighten-4'
+        default:
+          return 'orange lighten-4'
+      }
     },
     ...mapGetters({
       loadTypeById: 'types/loadType',
