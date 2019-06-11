@@ -13,10 +13,18 @@ export default $axios => resource => ({
   show(id) {
     return $axios.$get(`${process.env.API_URL}/${resource}/${id}`)
   },
-  create(payload) {
+  create(data) {
+    const payload = data
     return $axios.$post(`${process.env.API_URL}/${resource}`, payload)
   },
-  update(id, payload) {
+  update(data) {
+    const id = data.id
+    delete data.id
+
+    const resourceName = resource.split('/')[1]
+    const payload = {}
+    payload[`${resourceName}`] = data
+
     return $axios.$put(`${process.env.API_URL}/${resource}/${id}`, payload)
   },
   delete(id) {

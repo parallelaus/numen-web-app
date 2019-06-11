@@ -21,10 +21,12 @@ export const mutations = {
   ADD_BUILDING(state, building) {
     state.buildings.push(building)
   },
-  DELETE_BUILDING(state, building_id) {
-    const idx = state.buildings.findIndex(
-      building => building.id === building_id
-    )
+  UPDATE_BUILDING(state, building) {
+    const idx = state.buildings.findIndex(item => item.id == building.id)
+    state.buildings.splice(idx, 1, building)
+  },
+  DELETE_BUILDING(state, id) {
+    const idx = state.buildings.findIndex(item => item.id === id)
     state.buildings.splice(idx, 1)
   }
 }
@@ -45,9 +47,14 @@ export const actions = {
     commit('ADD_BUILDING', response.building)
   },
 
-  async deleteBuilding({ commit }, building_id) {
-    await this.$building.delete(building_id)
-    commit('DELETE_BUILDING', building_id)
+  async updateBuilding({ commit }, building) {
+    const response = await this.$building.update(building)
+    commit('UPDATE_BUILDING', response.building)
+  },
+
+  async deleteBuilding({ commit }, id) {
+    await this.$building.delete(id)
+    commit('DELETE_BUILDING', id)
   }
 }
 

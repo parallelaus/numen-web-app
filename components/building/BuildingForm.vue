@@ -1,11 +1,11 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
-    <v-btn slot="activator" color="primary" outline small>
-      Add Building to {{ site.name }}
+    <v-btn slot="activator" color="primary" outline small @click="initDialog()">
+      {{ dataButtonText }}
     </v-btn>
     <v-card>
       <v-card-title>
-        <span class="headline">Add a new building to {{ site.name }}</span>
+        <span class="headline">{{ dataHeaderText }}</span>
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
@@ -22,17 +22,14 @@
                 <v-textarea
                   v-model="building.description"
                   label="Description"
-                  rows="2"
                   auto-grow
                 />
               </v-flex>
-
               <v-flex>
                 <v-textarea
                   v-model="building.address"
                   label="Address*"
                   :rules="textRequired"
-                  rows="3"
                   auto-grow
                 />
               </v-flex>
@@ -55,12 +52,9 @@
         </span>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="error" flat @click="deleteBuilding">
-          Delete Building
-        </v-btn>
         <v-spacer />
         <v-btn color="primary" flat @click="dialog = false">
-          Close
+          Cancel
         </v-btn>
         <v-btn
           color="primary"
@@ -79,17 +73,30 @@
 import { mapState } from 'vuex'
 export default {
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    site: Object,
-    editBuildingId: {
-      type: Number,
+    site: {
+      type: Object,
+      required: true
+    },
+    editBuilding: {
+      type: Object,
       required: false,
-      default: null
+      default: undefined
+    },
+    headerText: {
+      type: String,
+      default: 'Add Building'
+    },
+    buttonText: {
+      type: String,
+      default: 'Add Building'
     }
   },
   data: () => ({
     dialog: false,
+    dataHeaderText: 'Add Building',
+    dataButtonText: 'Add Building',
     building: {
+      id: undefined,
       name: '',
       address: '',
       description: '',
@@ -104,11 +111,42 @@ export default {
       buildingTypes: state => state.types.building_types
     })
   },
+  watch: {
+    dialog: function(dialog) {
+      if (!dialog) {
+        this.building = {
+          id: undefined,
+          name: '',
+          address: '',
+          description: '',
+          building_type_id: null
+        }
+      }
+    }
+  },
+  created() {
+    this.dataButtonText = this.buttonText
+  },
   methods: {
+    initDialog() {
+      this.dataHeaderText = this.headerText
+      if (this.editBuilding) {
+        // Edit Mode
+        // Copy the editBuilding object into the building object
+        this.building = JSON.parse(JSON.stringify(this.editBuilding))
+      } else {
+        // Smart defaults
+        this.building.address = this.site.address
+      }
+    },
     async addUpdateBuilding() {
       if (this.$refs.form.validate()) {
         this.saving = true
-        await this.$store.dispatch('site/addBuilding', this.building)
+        if (this.building.id) {
+          await this.$store.dispatch('site/updateBuilding', this.building)
+        } else {
+          await this.$store.dispatch('site/addBuilding', this.building)
+        }
         this.saving = false
         this.dialog = false
       }

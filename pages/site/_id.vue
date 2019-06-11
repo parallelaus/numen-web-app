@@ -16,12 +16,15 @@
             </span>
           </v-flex>
           <v-flex xs6 text-xs-right>
-            <BuildingForm :site="site" />
+            <BuildingForm
+              :site="site"
+              :button-text="`Add Building to ${site.name}`"
+            />
           </v-flex>
         </v-layout>
       </v-flex>
       <v-flex>
-        <BuildingTabs :buildings="buildings" />
+        <BuildingTabs :site="site" :buildings="buildings" />
       </v-flex>
     </v-layout>
   </v-container>

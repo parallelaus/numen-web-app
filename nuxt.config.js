@@ -24,7 +24,6 @@ export default {
   loading: {
     color: '#BDBDBD',
     height: '3px',
-    continuous: true,
     duration: 6000
   },
 

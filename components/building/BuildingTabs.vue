@@ -16,18 +16,16 @@
             <BuildingElectrical :building="building" />
           </v-flex>
           <v-flex text-xs-right>
-            <v-btn
-              small
-              outline
-              color="primary"
-              @click="editBuilding(building)"
-            >
-              Edit {{ building.name }}
-            </v-btn>
             <ConfirmDelete
               :button-text="`Delete ${building.name}`"
               :activator-button-loading="deleting"
               @confirm="deleteBuilding(building.id)"
+            />
+            <BuildingForm
+              :site="site"
+              :edit-building="building"
+              :button-text="`Edit ${building.name}`"
+              :header-text="`Edit ${building.name}`"
             />
           </v-flex>
         </v-layout>
@@ -39,17 +37,26 @@
 <script>
 import BuildingElectrical from '@/components/building/BuildingElectrical'
 import SwitchboardForm from '@/components/switchboard/SwitchboardForm'
+import BuildingForm from '@/components/building/BuildingForm.vue'
 import ConfirmDelete from '@/components/core/Confirm'
 
 export default {
   components: {
     BuildingElectrical,
     SwitchboardForm,
+    BuildingForm,
     ConfirmDelete
   },
   props: {
     // eslint-disable-next-line vue/require-default-prop
-    buildings: Array
+    site: {
+      type: Object,
+      required: true
+    },
+    buildings: {
+      type: Array,
+      required: true
+    }
   },
   data: () => ({
     deleting: false,
