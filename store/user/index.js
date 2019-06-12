@@ -28,12 +28,26 @@ export const mutations = {
 
 export const actions = {
   async login({ commit }, credentials) {
-    const token = await this.$auth.token(credentials)
+    try {
+      const token = await this.$auth.token(credentials)
 
-    if (token) {
-      commit('SET_TOKEN', token)
-      commit('SET_USER', { roles: ['installer'] })
-      console.log('User login successful. Username: ' + credentials.username)
+      if (token) {
+        commit('SET_TOKEN', token)
+        commit('SET_USER', { roles: ['installer'] })
+        console.log('User login successful. Username: ' + credentials.username)
+      }
+      return true
+    } catch (error) {
+      if (!error.response) {
+        console.log('Server error')
+      } else {
+        if (error.response.status == 401) {
+          console.log(error.response.data.error_description)
+        } else {
+          console.log(error.response)
+        }
+      }
+      return false
     }
   },
   logout({ commit }) {

@@ -27,6 +27,9 @@
               </v-form>
             </v-card-text>
             <v-card-actions>
+              <p v-if="loginError" class="pl-4 red--text font-weight-medium">
+                Invalid Email and/or Password
+              </p>
               <v-spacer />
               <v-btn color="primary" :loading="loading" @click="submit">
                 Login
@@ -48,13 +51,17 @@ export default {
     },
     usernameRequired: [v => v.length > 0 || 'Please enter your email address'],
     passwordRequired: [v => v.length > 0 || 'Please enter your password'],
-    loading: false
+    loading: false,
+    loginError: false
   }),
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
+        this.loginError = false
         this.loading = true
-        await this.$store.dispatch('user/login', this.credentials)
+        if (!(await this.$store.dispatch('user/login', this.credentials))) {
+          this.loginError = true
+        }
         this.loading = false
       }
     }
