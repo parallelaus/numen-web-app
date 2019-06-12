@@ -6,6 +6,12 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{ dataHeaderText }}</span>
+        <span
+          v-if="$store.state.techMode && building.id"
+          class="caption font-weight-thin"
+        >
+          &nbsp;(ID: {{ building.id }})
+        </span>
       </v-card-title>
       <v-card-text>
         <v-form ref="form">

@@ -40,20 +40,17 @@
               xs12
             >
               <v-layout row>
-                <v-flex xs8 d-flex>
-                  <CircuitsCard :circuits="circuits(device.id)" />
-                </v-flex>
                 <v-flex xs4 d-flex>
                   <DeviceCard :device="device" />
                 </v-flex>
+                <v-flex xs8 d-flex>
+                  <CircuitsCard
+                    :circuits="circuits(device.id)"
+                    :device="device"
+                  />
+                </v-flex>
               </v-layout>
-              <v-btn
-                v-if="canAddCircuitsToDevice(device)"
-                color="primary"
-                outline
-              >
-                Add Circuit to {{ device.name }}
-              </v-btn>
+
               <v-divider
                 v-if="idx + 1 < devices(switchboard.id).length"
                 :key="idx"
@@ -78,8 +75,10 @@ export default {
     DeviceCard
   },
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    building: Object
+    building: {
+      type: Object,
+      required: true
+    }
   },
   data: () => ({
     addDeviceOptions: [
@@ -101,32 +100,6 @@ export default {
     })
   },
   methods: {
-    canAddCircuitsToDevice(device) {
-      // Single phase loads
-      if (device['3ph_load'] == 0 && device.circuits.length >= 1) {
-        return false
-      }
-
-      // Three phase supply
-      if (
-        device['3ph_load'] == 1 &&
-        device.load_type_id < 100 &&
-        device.circuits.length >= 4
-      ) {
-        return false
-      }
-
-      // Three phase loads
-      if (
-        device['3ph_load'] == 1 &&
-        device.load_type_id >= 100 &&
-        device.circuits.length >= 3
-      ) {
-        return false
-      }
-
-      return true
-    },
     circuits(device_id) {
       return this.circuitsByDevice(device_id)
     },

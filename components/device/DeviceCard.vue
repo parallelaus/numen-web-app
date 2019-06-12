@@ -1,5 +1,5 @@
 <template>
-  <v-card :color="deviceTypeColor" class="text-xs-left mr-3">
+  <v-card :color="deviceTypeColor" class="text-xs-left ml-3">
     <v-card-title class="subheading font-weight-bold">
       <div width="100%">
         {{ device.name }}

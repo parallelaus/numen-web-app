@@ -3,7 +3,7 @@
     <v-card
       v-for="circuit in circuits"
       :key="circuit.id"
-      class="ml-3"
+      class="mr-3"
       color="green lighten-4"
     >
       <v-card-title class="subheading font-weight-bold">
@@ -23,14 +23,56 @@
         </span>
       </v-card-text>
     </v-card>
+    <v-card v-if="canAddCircuitsToDevice(device)" class="green lighten-4 mr-3">
+      <v-card-text class="text-xs-center">
+        <v-btn color="primary" outline>
+          Add Circuit to {{ device.name }}
+        </v-btn>
+      </v-card-text>
+      </v-card-textclass="text-xs-center">
+    </v-card>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    circuits: Array
+    circuits: {
+      type: Array,
+      default: undefined
+    },
+    device: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    canAddCircuitsToDevice(device) {
+      // Single phase loads
+      if (device['3ph_load'] == 0 && device.circuits.length >= 1) {
+        return false
+      }
+
+      // Three phase supply
+      if (
+        device['3ph_load'] == 1 &&
+        device.load_type_id < 100 &&
+        device.circuits.length >= 4
+      ) {
+        return false
+      }
+
+      // Three phase loads
+      if (
+        device['3ph_load'] == 1 &&
+        device.load_type_id >= 100 &&
+        device.circuits.length >= 3
+      ) {
+        return false
+      }
+
+      return true
+    }
   }
 }
 </script>

@@ -35,6 +35,11 @@ export default {
 
   axios: {},
 
+  env: {
+    OAUTH_CLIENT_ID: '23498274567239',
+    OAUTH_CLIENT_SECRET: '461fd78e-8eb8-4eb2-a6aa-ae3ee69ea01c'
+  },
+
   build: {
     transpile: ['vuetify/lib'],
     plugins: [new VuetifyLoaderPlugin()],
