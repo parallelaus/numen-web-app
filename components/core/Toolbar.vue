@@ -3,20 +3,22 @@
     <v-navigation-drawer
       id="nav-drawer"
       v-model="drawer"
-      width="170"
+      width="200"
       clipped
       app
       hide-overlay
     >
       <v-list>
         <v-list-tile
-          v-for="link in links"
+          v-for="link in userLinks"
           :key="link.text"
           router
           :to="link.route"
         >
           <v-list-tile-action>
-            <v-icon>{{ link.icon }}</v-icon>
+            <v-icon small>
+              {{ link.icon }}
+            </v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title class="title font-weight-thin">
@@ -38,7 +40,11 @@
       </v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
-        <v-btn icon @click="toggleTechMode">
+        <v-btn
+          v-if="requestAccess('techMode.access')"
+          icon
+          @click="toggleTechMode"
+        >
           <v-icon :class="techModeClass" small class="white--text">
             build
           </v-icon>
@@ -54,14 +60,30 @@
 </template>
 
 <script>
+import AccessControl from '@/mixins/access-control'
+
 export default {
+  mixins: [AccessControl],
   data: () => ({
     drawer: null,
     links: [
       {
-        icon: 'places',
-        text: 'Sites',
-        route: '/site'
+        icon: 'dashboard',
+        text: 'Dashboard',
+        route: '/',
+        access: 'siteData.view'
+      },
+      {
+        icon: 'save',
+        text: 'Data',
+        route: '/',
+        access: 'siteData.view'
+      },
+      {
+        icon: 'location_city',
+        text: 'Installation',
+        route: '/site',
+        access: 'siteConfig.view'
       }
     ]
   }),
@@ -70,6 +92,9 @@ export default {
       return {
         'grey--text darken-2': !this.$store.state.techMode
       }
+    },
+    userLinks() {
+      return this.links.filter(link => this.requestAccess(link.access))
     }
   },
   methods: {

@@ -1,6 +1,20 @@
 export const state = () => ({
   roles: [],
-  token: {}
+  token: {},
+  access: {
+    techMode: {
+      access: true // user can access tech mode
+    },
+    siteConfig: {
+      view: true, // user can view site configuration
+      update: true, // user can edit site entities e.g. name, description etc.
+      manage: true // user can add and delete site entities
+    },
+    siteData: {
+      view: true, // user can view data
+      export: true // user can export data
+    }
+  }
 })
 
 export const mutations = {

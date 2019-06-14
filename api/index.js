@@ -29,5 +29,22 @@ export default $axios => resource => ({
   },
   delete(id) {
     return $axios.$delete(`${process.env.API_URL}/${resource}/${id}`)
+  },
+
+  /**
+   * Adds the given child resource to the current parent resource
+   *
+   * @param id - Parent resource ID
+   * @param childType - Child resource type e.g. building
+   * @param data - Child resource data
+   */
+  addChild(id, childType, data) {
+    const payload = {
+      [childType]: data
+    }
+    return $axios.$post(
+      `${process.env.API_URL}/${resource}/${id}/${childType}`,
+      payload
+    )
   }
 })

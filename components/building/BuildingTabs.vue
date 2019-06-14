@@ -9,12 +9,6 @@
       </v-tab>
       <v-tab-item v-for="building in buildings" :key="building.id">
         <v-layout column>
-          <v-flex xs12 class="text-xs-right">
-            <SwitchboardForm :building="building" />
-          </v-flex>
-          <v-flex>
-            <BuildingElectrical :building="building" />
-          </v-flex>
           <v-flex text-xs-right>
             <ConfirmDelete
               :button-text="`Delete ${building.name}`"
@@ -26,6 +20,16 @@
               :edit-building="building"
               :button-text="`Edit ${building.name}`"
               :header-text="`Edit ${building.name}`"
+            />
+          </v-flex>
+          <v-flex>
+            <BuildingElectrical :building="building" />
+          </v-flex>
+          <v-flex xs12 class="text-xs-center">
+            <SwitchboardForm
+              :building="building"
+              :button-text="`Add Switchboard to ${building.name}`"
+              :header-text="`Add Switchboard to ${building.name}`"
             />
           </v-flex>
         </v-layout>

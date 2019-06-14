@@ -23,13 +23,12 @@
         </span>
       </v-card-text>
     </v-card>
-    <v-card v-if="canAddCircuitsToDevice(device)" class="green lighten-4 mr-3">
+    <v-card v-if="canAddCircuitsToDevice(device)" class="mr-3" flat>
       <v-card-text class="text-xs-center">
         <v-btn color="primary" outline>
           Add Circuit to {{ device.name }}
         </v-btn>
       </v-card-text>
-      </v-card-textclass="text-xs-center">
     </v-card>
   </div>
 </template>

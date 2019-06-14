@@ -1,3 +1,5 @@
+import pluralize from 'pluralize'
+
 export const state = () => ({
   sites: [],
   site: {},
@@ -18,16 +20,21 @@ export const mutations = {
     state.circuits = config.circuits
     state.devices = config.devices
   },
-  ADD_BUILDING(state, building) {
-    state.buildings.push(building)
+
+  ADD_ENTITY(state, entity) {
+    state[entity.collection].push(entity.entity)
   },
-  UPDATE_BUILDING(state, building) {
-    const idx = state.buildings.findIndex(item => item.id == building.id)
-    state.buildings.splice(idx, 1, building)
+  UPDATE_ENTITY(state, entity) {
+    const idx = state[entity.collection].findIndex(
+      item => item.id == entity.entity.id
+    )
+    state[entity.collection].splice(idx, 1, entity.entity)
   },
-  DELETE_BUILDING(state, id) {
-    const idx = state.buildings.findIndex(item => item.id === id)
-    state.buildings.splice(idx, 1)
+  DELETE_ENTITY(state, entity) {
+    const idx = state[entity.collection].findIndex(
+      item => item.id === entity.id
+    )
+    state[entity.collection].splice(idx, 1)
   }
 }
 
@@ -44,18 +51,41 @@ export const actions = {
 
   async addBuilding({ commit, state }, building) {
     const response = await this.$siteConfig.addBuilding(state.site.id, building)
-    commit('ADD_BUILDING', response.building)
+    commit('ADD_ENTITY', { collection: 'buildings', entity: response.building })
   },
 
   async updateBuilding({ commit }, building) {
     const response = await this.$building.update(building)
-    commit('UPDATE_BUILDING', response.building)
+    commit('UPDATE_ENTITY', {
+      collection: 'buildings',
+      entity: response.building
+    })
   },
 
   async deleteBuilding({ commit }, id) {
     await this.$building.delete(id)
-    commit('DELETE_BUILDING', id)
-  }
+    // commit('DELETE_BUILDING', id)
+    commit('DELETE_ENTITY', { collection: 'buildings', id: id })
+  },
+
+  /**
+   * Adds a child entity to the given parent
+   *
+   * @param { parentType, parentId, childType, child } entity
+   */
+  async addChildEntity({ commit }, entity) {
+    const response = await this[`$${entity.parentType}`].addChild(
+      entity.parentId,
+      entity.childType,
+      entity.child
+    )
+    commit('ADD_ENTITY', {
+      collection: pluralize(entity.childType),
+      entity: response.switchboard
+    })
+  },
+
+  async updateEntity({ commit }, entity) {}
 }
 
 export const getters = {

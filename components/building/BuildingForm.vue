@@ -99,6 +99,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    saving: false,
     dataHeaderText: 'Add Building',
     dataButtonText: 'Add Building',
     building: {
@@ -109,8 +110,7 @@ export default {
       building_type_id: null
     },
     textRequired: [v => v.length > 0 || 'Field is required'],
-    selectRequired: [v => v > 0 || 'Please select an option'],
-    saving: false
+    selectRequired: [v => v > 0 || 'Please select an option']
   }),
   computed: {
     ...mapState({
@@ -156,10 +156,6 @@ export default {
         this.saving = false
         this.dialog = false
       }
-    },
-    async deleteBuilding() {
-      console.log('Delete Building' + this.building.id)
-      this.dialog = false
     }
   }
 }

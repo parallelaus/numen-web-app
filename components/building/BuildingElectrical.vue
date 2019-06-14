@@ -6,10 +6,13 @@
         :key="switchboard.id"
       >
         <div slot="header">
-          <span class="subheading font-weight-bold">
+          <span class="subheading font-weight-bold text-uppercase">
             {{ switchboard.name }}
             <span v-if="$store.state.techMode" class="caption font-weight-thin">
               &nbsp;(ID: {{ switchboard.id }})
+            </span>
+            <span class="ml-5">
+              <v-icon color="primary" small>edit</v-icon>
             </span>
           </span>
           <p class="caption">
