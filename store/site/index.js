@@ -64,7 +64,6 @@ export const actions = {
 
   async deleteBuilding({ commit }, id) {
     await this.$building.delete(id)
-    // commit('DELETE_BUILDING', id)
     commit('DELETE_ENTITY', { collection: 'buildings', id: id })
   },
 
@@ -81,11 +80,32 @@ export const actions = {
     )
     commit('ADD_ENTITY', {
       collection: pluralize(entity.childType),
-      entity: response.switchboard
+      entity: response[entity.childType]
     })
   },
-
-  async updateEntity({ commit }, entity) {}
+  /**
+   * Deletes the given entity
+   *
+   * @param { type, entity } entity
+   */
+  async updateEntity({ commit }, entity) {
+    const response = await this[`$${entity.type}`].update(entity.entity)
+    commit('UPDATE_ENTITY', {
+      collection: pluralize(entity.type),
+      entity: response[entity.type]
+    })
+  },
+  /**
+   *
+   * @param { type, id } entity
+   */
+  async deleteEntity({ commit }, entity) {
+    const response = await this[`$${entity.type}`].delete(entity.id)
+    commit('DELETE_ENTITY', {
+      collection: pluralize(entity.type),
+      id: entity.id
+    })
+  }
 }
 
 export const getters = {

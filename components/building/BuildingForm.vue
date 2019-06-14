@@ -149,9 +149,17 @@ export default {
       if (this.$refs.form.validate()) {
         this.saving = true
         if (this.building.id) {
-          await this.$store.dispatch('site/updateBuilding', this.building)
+          await this.$store.dispatch('site/updateEntity', {
+            type: 'building',
+            entity: this.building
+          })
         } else {
-          await this.$store.dispatch('site/addBuilding', this.building)
+          await this.$store.dispatch('site/addChildEntity', {
+            parentType: 'site',
+            parentId: this.site.id,
+            childType: 'building',
+            child: this.building
+          })
         }
         this.saving = false
         this.dialog = false

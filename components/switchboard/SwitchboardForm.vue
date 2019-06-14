@@ -26,11 +26,7 @@
                 />
               </v-flex>
               <v-flex>
-                <v-text-field
-                  v-model="switchboard.location"
-                  label="Location"
-                  :rules="textRequired"
-                />
+                <v-text-field v-model="switchboard.location" label="Location" />
               </v-flex>
             </v-layout>
           </v-container>
@@ -120,7 +116,10 @@ export default {
       if (this.$refs.form.validate()) {
         this.saving = true
         if (this.switchboard.id) {
-          await this.$store.dispatch('site/updateSwitchboard', this.building)
+          await this.$store.dispatch('site/updateEntity', {
+            type: 'switchboard',
+            entity: this.switchboard
+          })
         } else {
           await this.$store.dispatch('site/addChildEntity', {
             parentType: 'building',

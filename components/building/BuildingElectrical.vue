@@ -11,29 +11,48 @@
             <span v-if="$store.state.techMode" class="caption font-weight-thin">
               &nbsp;(ID: {{ switchboard.id }})
             </span>
-            <span class="ml-5">
-              <v-icon color="primary" small>edit</v-icon>
-            </span>
           </span>
-          <p class="caption">
-            {{ switchboard.description }}
+          <p v-if="switchboard.location" class="caption pa-0 ma-0">
+            <span class="font-weight-bold">Location: </span>
+            <span>{{ switchboard.location }}</span>
+          </p>
+          <p v-if="switchboard.description" class="caption pa-0 ma-0">
+            <span class="font-weight-bold">Description: </span>
+            <span>{{ switchboard.description }}</span>
           </p>
         </div>
-        <div class="text-xs-right mr-2">
-          <v-menu offset-y>
-            <v-btn slot="activator" color="primary" outline small>
-              Add Device to {{ switchboard.name }}
-            </v-btn>
-            <v-list>
-              <v-list-tile
-                v-for="(item, index) in addDeviceOptions"
-                :key="index"
-                @click="addDevice(item.type)"
-              >
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+        <div class="">
+          <v-layout row wrap>
+            <v-flex xs6 pl-2>
+              <v-menu offset-y>
+                <v-btn slot="activator" color="primary" outline small>
+                  Add Device to {{ switchboard.name }}
+                </v-btn>
+                <v-list>
+                  <v-list-tile
+                    v-for="(item, index) in addDeviceOptions"
+                    :key="index"
+                    @click="addDevice(item.type)"
+                  >
+                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
+            </v-flex>
+            <v-flex xs6 class="text-xs-right">
+              <ConfirmDelete
+                :button-text="`Delete ${switchboard.name}`"
+                :activator-button-loading="deleting"
+                @confirm="deleteSwitchboard(switchboard.id)"
+              />
+              <SwitchboardForm
+                :building="building"
+                :edit-switchboard="switchboard"
+                :button-text="`Edit ${switchboard.name}`"
+                :header-text="`Edit ${switchboard.name}`"
+              />
+            </v-flex>
+          </v-layout>
         </div>
         <v-container fluid grid-list-md pa-0 pb-3>
           <v-layout column>
@@ -71,11 +90,15 @@
 import { mapGetters } from 'vuex'
 import CircuitsCard from '@/components/circuit/CircuitsCard.vue'
 import DeviceCard from '@/components/device/DeviceCard.vue'
+import SwitchboardForm from '@/components/switchboard/SwitchboardForm'
+import ConfirmDelete from '@/components/core/Confirm'
 
 export default {
   components: {
     CircuitsCard,
-    DeviceCard
+    DeviceCard,
+    SwitchboardForm,
+    ConfirmDelete
   },
   props: {
     building: {
@@ -84,6 +107,7 @@ export default {
     }
   },
   data: () => ({
+    deleting: false,
     addDeviceOptions: [
       { type: '3ph_load', title: 'Three Phase Load - Balanced' },
       { type: '3ph_load', title: 'Three Phase Load - Unbalanced' },
@@ -111,6 +135,18 @@ export default {
     },
     addDevice(type) {
       console.log('Add device type=' + type)
+    },
+    async deleteSwitchboard(switchboard_id) {
+      this.deleting = true
+      await this.$store.dispatch('site/deleteEntity', {
+        type: 'switchboard',
+        id: switchboard_id
+      })
+      this.deleting = false
+    },
+
+    editSwitchboard(id) {
+      console.log('Edit switchboard: ' + id)
     }
   }
 }

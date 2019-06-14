@@ -16,12 +16,12 @@
           :to="link.route"
         >
           <v-list-tile-action>
-            <v-icon small>
+            <v-icon small color="primary">
               {{ link.icon }}
             </v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title class="title font-weight-thin">
+            <v-list-tile-title class="title font-weight-medium primary--text">
               {{ link.text }}
             </v-list-tile-title>
           </v-list-tile-content>
