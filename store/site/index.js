@@ -49,24 +49,6 @@ export const actions = {
     commit('SET_SITE_CONFIG', response)
   },
 
-  async addBuilding({ commit, state }, building) {
-    const response = await this.$siteConfig.addBuilding(state.site.id, building)
-    commit('ADD_ENTITY', { collection: 'buildings', entity: response.building })
-  },
-
-  async updateBuilding({ commit }, building) {
-    const response = await this.$building.update(building)
-    commit('UPDATE_ENTITY', {
-      collection: 'buildings',
-      entity: response.building
-    })
-  },
-
-  async deleteBuilding({ commit }, id) {
-    await this.$building.delete(id)
-    commit('DELETE_ENTITY', { collection: 'buildings', id: id })
-  },
-
   /**
    * Adds a child entity to the given parent
    *
