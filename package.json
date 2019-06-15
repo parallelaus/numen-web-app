@@ -2,6 +2,7 @@
   "name": "numen-installer",
   "scripts": {
     "dev": "nuxt",
+    "build": "nuxt build",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore ."
   },

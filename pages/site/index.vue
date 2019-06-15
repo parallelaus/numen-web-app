@@ -1,14 +1,18 @@
 <template>
-  <v-container grid-list-md>
-    <v-layout column>
-      <SiteCard v-for="site in sites" :key="site.id" :site="site" />
-    </v-layout>
-  </v-container>
+  <div>
+    <RefreshButton :refreshing="refreshing" @click="refreshSites()" />
+    <v-container grid-list-md>
+      <v-layout column>
+        <SiteCard v-for="site in sites" :key="site.id" :site="site" />
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import SiteCard from '@/components/site/SiteCard.vue'
-import { mapState } from 'vuex'
+import RefreshButton from '@/components/core/RefreshButton'
+import { mapGetters } from 'vuex'
 
 export default {
   head() {
@@ -17,13 +21,28 @@ export default {
     }
   },
   components: {
-    SiteCard
+    SiteCard,
+    RefreshButton
   },
-  computed: mapState({
-    sites: state => state.site.sites
+  data: () => ({
+    refreshing: false
   }),
+  computed: {
+    ...mapGetters({
+      sites: 'site/sites'
+    })
+  },
   async fetch({ store }) {
-    await store.dispatch('site/fetchSites')
+    if (store.state.site.sites == 0) {
+      await store.dispatch('site/fetchSites')
+    }
+  },
+  methods: {
+    async refreshSites() {
+      this.refreshing = true
+      await this.$store.dispatch('site/fetchSites')
+      this.refreshing = false
+    }
   }
 }
 </script>

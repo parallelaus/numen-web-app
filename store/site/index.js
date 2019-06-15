@@ -91,12 +91,15 @@ export const actions = {
 }
 
 export const getters = {
-  site: state => id => {
-    return state.sites.find(site => site.id == id)
+  site: state => {
+    return state.site
   },
 
   buildings: state => {
     return state.buildings
+  },
+  sites: state => {
+    return state.sites
   },
 
   switchboardsByBuilding: state => building_id => {
