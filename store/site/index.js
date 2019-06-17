@@ -87,7 +87,9 @@ export const actions = {
       collection: pluralize(entity.type),
       id: entity.id
     })
-  }
+  },
+
+  async addDeviceCircuits({ commit }, data) {}
 }
 
 export const getters = {
@@ -132,7 +134,26 @@ export const getters = {
     return state.circuits.filter(circuit =>
       deviceCircuitsIds.includes(circuit.id)
     )
+  },
+
+  isSupplyDevice: state => device => {
+    return isSupplyDevice(device)
+  },
+
+  switchboardSupplyDevice: state => switchboard_id => {
+    const circuit = state.circuits.find(circuit => {
+      return circuit.switchboard_id == switchboard_id && isSupplyDevice(circuit)
+    })
+    if (circuit) {
+      return state.devices.find(device => device.id == circuit.devices[0])
+    }
+    return false
   }
+}
+
+function isSupplyDevice(deviceOrCircuit) {
+  const supplyTypes = [1, 3, 4] // DB Id's of Supply Load Types
+  return supplyTypes.includes(deviceOrCircuit.load_type_id)
 }
 
 function sortByLoadType(a, b) {

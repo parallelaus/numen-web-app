@@ -19,14 +19,14 @@
                 />
               </v-flex>
               <v-flex>
+                <v-text-field v-model="switchboard.location" label="Location" />
+              </v-flex>
+              <v-flex>
                 <v-textarea
                   v-model="switchboard.description"
                   label="Description"
                   auto-grow
                 />
-              </v-flex>
-              <v-flex>
-                <v-text-field v-model="switchboard.location" label="Location" />
               </v-flex>
             </v-layout>
           </v-container>

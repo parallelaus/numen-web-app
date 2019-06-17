@@ -2,6 +2,9 @@
   <v-card :color="deviceTypeColor" class="text-xs-left ml-3">
     <v-card-title class="subheading font-weight-bold">
       <div width="100%">
+        <p v-if="isSupplyDevice(device)" class="font-weight-light pa-0 ma-0">
+          {{ loadType(device.load_type_id).label }}
+        </p>
         {{ device.name }}
       </div>
       <span v-if="$store.state.techMode" class="caption font-weight-thin">
@@ -57,8 +60,10 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    device: Object
+    device: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     supplyType() {
@@ -67,17 +72,22 @@ export default {
     deviceTypeColor() {
       switch (this.device.load_type_id) {
         case 1:
+          // Switchboard Mains
+          return 'blue lighten-2'
         case 3:
-        case 4:
-          // Incomming Supply Circuits
+          // Site Mains
           return 'blue lighten-4'
+        case 4:
+          // Building Mains
+          return 'blue lighten-2'
         default:
           return 'orange lighten-4'
       }
     },
     ...mapGetters({
       loadTypeById: 'types/loadType',
-      loadCategoryById: 'types/loadCategory'
+      loadCategoryById: 'types/loadCategory',
+      isSupplyDevice: 'site/isSupplyDevice'
     })
   },
   methods: {

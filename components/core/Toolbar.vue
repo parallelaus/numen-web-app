@@ -3,7 +3,7 @@
     <v-navigation-drawer
       id="nav-drawer"
       v-model="drawer"
-      width="200"
+      width="210"
       clipped
       app
       hide-overlay
@@ -81,7 +81,7 @@ export default {
       },
       {
         icon: 'location_city',
-        text: 'Installation',
+        text: 'Installations',
         route: '/site',
         access: 'siteConfig.view'
       }

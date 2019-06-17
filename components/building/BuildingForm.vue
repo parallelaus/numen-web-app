@@ -26,13 +26,6 @@
               </v-flex>
               <v-flex>
                 <v-textarea
-                  v-model="building.description"
-                  label="Description"
-                  auto-grow
-                />
-              </v-flex>
-              <v-flex>
-                <v-textarea
                   v-model="building.address"
                   label="Address*"
                   :rules="textRequired"
@@ -48,6 +41,13 @@
                   item-text="label"
                   item-value="id"
                   label="Building Type*"
+                />
+              </v-flex>
+              <v-flex>
+                <v-textarea
+                  v-model="building.description"
+                  label="Description"
+                  auto-grow
                 />
               </v-flex>
             </v-layout>

@@ -1,7 +1,8 @@
 export const state = () => ({
   load_categories: [],
   load_types: [],
-  building_types: []
+  building_types: [],
+  ct_types: []
 })
 
 export const mutations = {
@@ -13,6 +14,9 @@ export const mutations = {
   },
   SET_BUILDING_TYPES(state, types) {
     state.building_types = types
+  },
+  SET_CT_TYPES(state, types) {
+    state.ct_types = types
   }
 }
 
@@ -24,6 +28,9 @@ export const actions = {
 
     const building = await this.$types.fetchBuildingTypes()
     commit('SET_BUILDING_TYPES', building.building_types)
+
+    const cts = await this.$types.fetchCtTypes()
+    commit('SET_CT_TYPES', cts.ct_types)
   }
 }
 
@@ -33,6 +40,33 @@ export const getters = {
   },
   loadCategory: state => id => {
     return state.load_categories.find(cat => cat.id == id)
+  },
+
+  /**
+   * Return the load categories assigned to the required section
+   *
+   * Available sections are:
+   *  - incoming_supplies
+   *  - outgoing_supplies
+   *  - chassis_supplies
+   *  - devices (default)
+   *  - generation
+   *  - storage
+   *
+   */
+  sectionCategories: state => section => {
+    let categories = []
+
+    // Select categories and types according to requested section
+    switch (section) {
+      case 'chassis_supplies':
+        categories = state.load_categories.filter(category => category.id == 1)
+      default:
+        // default: devices
+        categories = state.load_categories.filter(category => category.id > 100)
+    }
+
+    return categories
   }
 }
 

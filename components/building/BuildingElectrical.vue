@@ -24,20 +24,7 @@
         <div class="">
           <v-layout row wrap>
             <v-flex xs6 pl-2>
-              <v-menu offset-y>
-                <v-btn slot="activator" color="primary" outline small>
-                  Add Device to {{ switchboard.name }}
-                </v-btn>
-                <v-list>
-                  <v-list-tile
-                    v-for="(item, index) in addDeviceOptions"
-                    :key="index"
-                    @click="addDevice(item.type)"
-                  >
-                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-menu>
+              <DeviceCircuitsForm :switchboard="switchboard" />
             </v-flex>
             <v-flex xs6 class="text-xs-right">
               <ConfirmDelete
@@ -92,13 +79,15 @@ import CircuitsCard from '@/components/circuit/CircuitsCard.vue'
 import DeviceCard from '@/components/device/DeviceCard.vue'
 import SwitchboardForm from '@/components/switchboard/SwitchboardForm'
 import ConfirmDelete from '@/components/core/Confirm'
+import DeviceCircuitsForm from '@/components/device/DeviceCircuitsForm'
 
 export default {
   components: {
     CircuitsCard,
     DeviceCard,
     SwitchboardForm,
-    ConfirmDelete
+    ConfirmDelete,
+    DeviceCircuitsForm
   },
   props: {
     building: {
@@ -107,14 +96,7 @@ export default {
     }
   },
   data: () => ({
-    deleting: false,
-    addDeviceOptions: [
-      { type: '3ph_load', title: 'Three Phase Load - Balanced' },
-      { type: '3ph_load', title: 'Three Phase Load - Unbalanced' },
-      { type: '1ph_load', title: 'Single Phase Load' },
-      { type: '3ph_incoming', title: 'Three Phase Supply - Incoming' },
-      { type: '3ph_outgoing', title: 'Three Phase Supply - Outgoing' }
-    ]
+    deleting: false
   }),
   computed: {
     switchboards() {
@@ -132,9 +114,6 @@ export default {
     },
     devices(switchboard_id) {
       return this.devicesBySwitchboard(switchboard_id)
-    },
-    addDevice(type) {
-      console.log('Add device type=' + type)
     },
     async deleteSwitchboard(switchboard_id) {
       this.deleting = true
