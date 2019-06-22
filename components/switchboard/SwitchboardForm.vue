@@ -88,27 +88,24 @@ export default {
     },
     textRequired: [v => v.length > 0 || 'Field is required']
   }),
-  watch: {
-    dialog: function(dialog) {
-      if (!dialog) {
-        this.switchboard = {
-          id: undefined,
-          name: '',
-          description: '',
-          location: ''
-        }
-      }
-    }
-  },
   created() {
     this.dataButtonText = this.buttonText
   },
   methods: {
     initDialog() {
       this.dataHeaderText = this.headerText
+      this.$refs.form.resetValidation()
       if (this.editSwitchboard) {
         // Edit Mode
         this.switchboard = JSON.parse(JSON.stringify(this.editSwitchboard))
+      } else {
+        // smart defaults
+        this.switchboard = {
+          id: undefined,
+          name: '',
+          description: '',
+          location: ''
+        }
       }
     },
 

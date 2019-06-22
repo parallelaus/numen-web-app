@@ -117,32 +117,26 @@ export default {
       buildingTypes: state => state.types.building_types
     })
   },
-  watch: {
-    dialog: function(dialog) {
-      if (!dialog) {
-        this.building = {
-          id: undefined,
-          name: '',
-          address: '',
-          description: '',
-          building_type_id: null
-        }
-      }
-    }
-  },
   created() {
     this.dataButtonText = this.buttonText
   },
   methods: {
     initDialog() {
       this.dataHeaderText = this.headerText
+      this.$refs.form.resetValidation()
       if (this.editBuilding) {
         // Edit Mode
         // Copy the editBuilding object into the building object
         this.building = JSON.parse(JSON.stringify(this.editBuilding))
       } else {
         // Smart defaults
-        this.building.address = this.site.address
+        this.building = {
+          id: undefined,
+          name: '',
+          address: this.site.address,
+          description: '',
+          building_type_id: null
+        }
       }
     },
     async addUpdateBuilding() {

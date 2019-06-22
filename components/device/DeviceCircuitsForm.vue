@@ -55,15 +55,23 @@
                       />
                     </v-flex>
                     <v-flex v-if="showFedBySwitchboard" xs5>
-                      <v-text-field
+                      <v-select
                         v-model="formData.connectedSwitchboard"
-                        label="Fed By"
+                        :items="fedByOptions"
+                        label="Fed By*"
+                        :rules="selectRequired"
+                        item-text="name"
+                        item-value="id"
                       />
                     </v-flex>
                     <v-flex v-if="showFeedingSwitchboard" xs5>
-                      <v-text-field
+                      <v-select
                         v-model="formData.connectedSwitchboard"
-                        label="Feeding"
+                        :items="feedingOptions"
+                        label="Feeding*"
+                        :rules="selectRequired"
+                        item-text="name"
+                        item-value="id"
                       />
                     </v-flex>
                   </v-layout>
@@ -163,6 +171,11 @@ export default {
     switchboard: {
       type: Object,
       required: true
+    },
+    fedBySwitchboard: {
+      type: Object,
+      required: false,
+      default: undefined
     }
   },
   data: () => ({
@@ -179,17 +192,21 @@ export default {
       { type: 'load', title: 'Load' },
       { type: 'site_mains', title: 'Site Mains' },
       { type: 'building_mains', title: 'Building Mains' },
-      { type: 'switchboard_mains', title: 'Switchboard Mains' },
+      { type: 'switchboard_mains', title: 'Switchboard Supply' },
       { type: 'sub_supply', title: 'Supply to other Switchboard' },
       { type: 'internal_supply', title: 'Supply to internal sub-board' }
     ],
     supplyDeviceOptions: ['site_mains', 'building_mains', 'switchboard_mains'],
+    fedByOptions: [],
+    feedingOptions: [],
+
     formData: {
       id: undefined,
       name: '',
       description: '',
       location: '',
       three_phase: 'true',
+      phase: undefined,
       neutral: true,
       balanced_load: 'true',
       load_type_id: null,
@@ -200,8 +217,9 @@ export default {
       ct_cable_number: '',
       ct_size: 50
     },
+
     textRequired: [v => v.length > 0 || 'Field is required'],
-    selectRequired: [v => v > 0 || 'Please select an option']
+    selectRequired: [v => v != null || 'Please select an option']
   }),
   computed: {
     supplyDevice() {
@@ -228,16 +246,19 @@ export default {
       return options
     },
     ...mapState({
-      ctTypes: state => state.types.ct_types
+      ctTypes: state => state.types.ct_types,
+      switchboards: state => state.site.switchboards
     }),
     ...mapGetters({
       loadType: 'types/loadType',
       sectionCategories: 'types/sectionCategories',
-      supplyDevice: 'site/switchboardSupplyDevice'
+      supplyDevice: 'site/switchboardSupplyDevice',
+      switchboardsByBuilding: 'site/switchboardsByBuilding',
+      feedingSwitchboards: 'site/feedingSwitchboards'
     })
   },
   beforeMount() {
-    if (this.supplyDevice(this.switchboard.id)) {
+    if (this.supplyDevice(this.switchboard.id) || this.fedBySwitchboard) {
       // Remove supply options from Add Device Menu
       this.supplyDeviceOptions.forEach(type => {
         const supplyIndex = this.addDeviceOptions.findIndex(
@@ -252,6 +273,26 @@ export default {
   methods: {
     initDialog(option) {
       this.addDeviceSelectedOption = option
+
+      // Add Only Form - reset validation and formData
+      this.$refs.form.resetValidation()
+      this.formData = {
+        id: undefined,
+        name: '',
+        description: '',
+        location: '',
+        three_phase: 'true',
+        phase: undefined,
+        neutral: true,
+        balanced_load: 'true',
+        load_type_id: null,
+        connectedSwitchboard: null,
+        breaker_size: '',
+        cable_size: '',
+        cable_no_cores: 1,
+        ct_cable_number: '',
+        ct_size: 50
+      }
 
       // Setup smart defaults
       switch (option.type) {
@@ -280,6 +321,10 @@ export default {
           this.showFedBySwitchboard = true
           this.showFeedingSwitchboard = false
 
+          this.fedByOptions = this.filterConnectedSwitchboardOptions(
+            this.switchboards
+          )
+
           break
         case 'switchboard_mains':
           this.formData.load_type_id = 1
@@ -293,6 +338,10 @@ export default {
           this.showFedBySwitchboard = true
           this.showFeedingSwitchboard = false
 
+          this.fedByOptions = this.filterConnectedSwitchboardOptions(
+            this.switchboardsByBuilding(this.switchboard.building_id)
+          )
+
           break
         case 'sub_supply':
           this.formData.load_type_id = 2
@@ -305,6 +354,11 @@ export default {
           this.showLocation = false
           this.showFedBySwitchboard = false
           this.showFeedingSwitchboard = true
+
+          this.feedingOptions = this.filterConnectedSwitchboardOptions(
+            this.switchboards,
+            false
+          )
 
           break
         default:
@@ -321,6 +375,52 @@ export default {
       }
 
       this.dialog = true
+    },
+    getFedByOptions(option_type) {
+      let switchboards = []
+      if (option_type == 'switchboard_mains') {
+        switchboards = this.switchboardsByBuilding(this.switchboard.building_id)
+      } else {
+        switchboards = this.switchboards
+      }
+
+      const feedingSwitchboards = this.feedingSwitchboards(this.switchboard.id)
+
+      const fedByOptions = switchboards.filter(switchboard => {
+        // remove current switchboard
+        if (switchboard.id == this.switchboard.id) return false
+        // remove switchboards being fed by current switchboard
+        if (feedingSwitchboards.find(item => item.id == switchboard.id))
+          return false
+        return true
+      })
+
+      const unspecifiedOption = {
+        id: 0,
+        name: 'Unspecified'
+      }
+      return [unspecifiedOption, ...fedByOptions]
+    },
+    filterConnectedSwitchboardOptions(switchboards, includeUnspecified = true) {
+      const feedingSwitchboards = this.feedingSwitchboards(this.switchboard.id)
+
+      const fedByOptions = switchboards.filter(switchboard => {
+        // remove current switchboard
+        if (switchboard.id == this.switchboard.id) return false
+        // remove switchboards being fed by current switchboard
+        if (feedingSwitchboards.find(item => item.id == switchboard.id))
+          return false
+        return true
+      })
+
+      if (includeUnspecified) {
+        const unspecifiedOption = {
+          id: 0,
+          name: 'Unspecified'
+        }
+        return [unspecifiedOption, ...fedByOptions]
+      }
+      return fedByOptions
     },
     addDeviceCircuits() {
       if (this.$refs.form.validate()) {

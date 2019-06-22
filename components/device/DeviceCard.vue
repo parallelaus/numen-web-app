@@ -73,13 +73,16 @@ export default {
       switch (this.device.load_type_id) {
         case 1:
           // Switchboard Mains
-          return 'blue lighten-2'
+          return 'blue lighten-4'
         case 3:
           // Site Mains
-          return 'blue lighten-4'
+          return 'blue lighten-2'
         case 4:
           // Building Mains
-          return 'blue lighten-2'
+          return 'blue lighten-3'
+        case 2:
+          // Outgoing supply
+          return 'orange lighten-3'
         default:
           return 'orange lighten-4'
       }
