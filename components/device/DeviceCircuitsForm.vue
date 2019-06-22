@@ -193,10 +193,15 @@ export default {
       { type: 'site_mains', title: 'Site Mains' },
       { type: 'building_mains', title: 'Building Mains' },
       { type: 'switchboard_mains', title: 'Switchboard Supply' },
-      { type: 'sub_supply', title: 'Supply to other Switchboard' },
-      { type: 'internal_supply', title: 'Supply to internal sub-board' }
+      { type: 'sub_supply', title: 'Supply to other Switchboard' }
+      // { type: 'chassis_supply', title: 'Supply to internal sub-board or chassis' }
     ],
-    supplyDeviceOptions: ['site_mains', 'building_mains', 'switchboard_mains'],
+    incomingSupplyOptions: [
+      'site_mains',
+      'building_mains',
+      'switchboard_mains'
+    ],
+    outgoingSupplyOptions: ['sub_supply'],
     fedByOptions: [],
     feedingOptions: [],
 
@@ -258,9 +263,24 @@ export default {
     })
   },
   beforeMount() {
+    // remove supply options from Add Device Menu if switchboard already supplied
     if (this.supplyDevice(this.switchboard.id) || this.fedBySwitchboard) {
-      // Remove supply options from Add Device Menu
-      this.supplyDeviceOptions.forEach(type => {
+      this.incomingSupplyOptions.forEach(type => {
+        const supplyIndex = this.addDeviceOptions.findIndex(
+          item => item.type == type
+        )
+        if (supplyIndex) {
+          this.addDeviceOptions.splice(supplyIndex, 1)
+        }
+      })
+    }
+    // remove outgoing supply option if no other switchbaords available
+    const feedingOptions = this.filterConnectedSwitchboardOptions(
+      this.switchboards,
+      false
+    )
+    if (feedingOptions.length == 0) {
+      this.outgoingSupplyOptions.forEach(type => {
         const supplyIndex = this.addDeviceOptions.findIndex(
           item => item.type == type
         )
