@@ -7,9 +7,9 @@
       color="green lighten-4"
     >
       <v-card-title class="subheading font-weight-bold">
-        {{ circuit.name }}
+        {{ phaseColour(circuit.phase_id).label }}
         <span v-if="$store.state.techMode" class="caption font-weight-thin">
-          &nbsp;(ID: {{ circuit.id }})
+          &nbsp;(Circuit ID: {{ circuit.id }})
         </span>
       </v-card-title>
       <v-card-text class="caption">
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     circuits: {
@@ -45,7 +46,15 @@ export default {
       required: true
     }
   },
+  computed: {
+    ...mapGetters({
+      phaseColourByPhase: 'site/phaseColour'
+    })
+  },
   methods: {
+    phaseColour(phase) {
+      return this.phaseColourByPhase(phase)
+    },
     canAddCircuitsToDevice(device) {
       // Single phase loads
       if (device['3ph_load'] == 0 && device.circuits.length >= 1) {

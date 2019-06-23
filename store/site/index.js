@@ -174,6 +174,10 @@ export const getters = {
 
   buildingAreas: state => building_id => {
     return buildingAreas(state, building_id)
+  },
+
+  phaseColour: state => phase => {
+    return state.phase_colours.find(colour => colour.phase == phase)
   }
 }
 

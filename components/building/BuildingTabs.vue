@@ -1,45 +1,54 @@
 <template>
   <div>
-    <v-tabs
-      id="building-tabs"
-      fixed-tabs
-      slider-color="primary"
-      color="transparent"
-    >
-      <v-tab v-for="building in buildings" :key="building.id">
-        {{ building.name }}
-        <span v-if="$store.state.techMode" class="caption font-weight-thin">
-          &nbsp;(ID: {{ building.id }})
-        </span>
-      </v-tab>
-      <v-tab-item v-for="building in buildings" :key="building.id" class="mt-3">
-        <v-layout row wrap>
-          <v-flex xs6>
-            <SwitchboardForm
-              :building="building"
-              :button-text="`Add Switchboard to ${building.name}`"
-              :header-text="`Add Switchboard to ${building.name}`"
-            />
-          </v-flex>
-          <v-flex xs6 class="text-xs-right">
-            <ConfirmDelete
-              :button-text="`Delete ${building.name}`"
-              :activator-button-loading="deleting"
-              @confirm="deleteBuilding(building.id)"
-            />
-            <BuildingForm
-              :site="site"
-              :edit-building="building"
-              :button-text="`Edit ${building.name}`"
-              :header-text="`Edit ${building.name}`"
-            />
-          </v-flex>
-          <v-flex>
-            <BuildingElectrical :building="building" />
-          </v-flex>
-        </v-layout>
-      </v-tab-item>
-    </v-tabs>
+    <v-sheet color="grey lighten-3">
+      <v-tabs
+        id="building-tabs"
+        fixed-tabs
+        slider-color="primary"
+        color="transparent"
+      >
+        <v-tab v-for="building in buildings" :key="building.id">
+          {{ building.name }}
+          <span
+            v-if="$store.state.techMode"
+            class="caption font-weight-thin text-capitalize"
+          >
+            &nbsp;(Building ID: {{ building.id }})
+          </span>
+        </v-tab>
+        <v-tab-item
+          v-for="building in buildings"
+          :key="building.id"
+          class="mt-3"
+        >
+          <v-layout row wrap>
+            <v-flex xs6>
+              <SwitchboardForm
+                :building="building"
+                :button-text="`Add Switchboard to ${building.name}`"
+                :header-text="`Add Switchboard to ${building.name}`"
+              />
+            </v-flex>
+            <v-flex xs6 class="text-xs-right">
+              <ConfirmDelete
+                :button-text="`Delete ${building.name}`"
+                :activator-button-loading="deleting"
+                @confirm="deleteBuilding(building.id)"
+              />
+              <BuildingForm
+                :site="site"
+                :edit-building="building"
+                :button-text="`Edit ${building.name}`"
+                :header-text="`Edit ${building.name}`"
+              />
+            </v-flex>
+            <v-flex class="px-2 pb-2">
+              <BuildingElectrical :building="building" />
+            </v-flex>
+          </v-layout>
+        </v-tab-item>
+      </v-tabs>
+    </v-sheet>
   </div>
 </template>
 

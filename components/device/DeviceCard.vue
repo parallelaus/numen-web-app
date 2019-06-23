@@ -8,7 +8,7 @@
         {{ device.name }}
       </div>
       <span v-if="$store.state.techMode" class="caption font-weight-thin">
-        &nbsp;(ID: {{ device.id }})
+        &nbsp;(Device ID: {{ device.id }})
       </span>
       <p v-if="device.description" class="caption pa-0 ma-0">
         {{ device.description }}
@@ -19,7 +19,7 @@
         <span class="caption font-weight-bold">Location: </span>
         <span>Basement</span>
         <span v-if="$store.state.techMode" class="caption font-weight-thin">
-          &nbsp;(area: {{ device.area_id }})
+          &nbsp;(area_id: {{ device.area_id }})
         </span>
       </p>
       <p class="pa-0 ma-0">

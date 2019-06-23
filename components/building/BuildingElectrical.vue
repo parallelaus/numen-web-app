@@ -8,8 +8,11 @@
         <div slot="header">
           <span class="subheading font-weight-bold text-uppercase">
             {{ switchboard.name }}
-            <span v-if="$store.state.techMode" class="caption font-weight-thin">
-              &nbsp;(ID: {{ switchboard.id }})
+            <span
+              v-if="$store.state.techMode"
+              class="caption font-weight-thin text-capitalize"
+            >
+              &nbsp;(Switchboard ID: {{ switchboard.id }})
             </span>
           </span>
           <p
@@ -19,7 +22,8 @@
             <span class="font-weight-bold">Fed By: </span>
             <span>{{ getFedBySwitchboard(switchboard.id).name }}</span>
             <span v-if="$store.state.techMode" class="caption font-weight-thin">
-              &nbsp;(ID: {{ getFedBySwitchboard(switchboard.id).id }})
+              &nbsp;(Switchboard ID:
+              {{ getFedBySwitchboard(switchboard.id).id }})
             </span>
           </p>
           <p v-if="switchboard.location" class="caption pa-0 ma-0">
@@ -39,7 +43,7 @@
                 :fed-by-switchboard="getFedBySwitchboard(switchboard.id)"
               />
             </v-flex>
-            <v-flex xs6 class="text-xs-right">
+            <v-flex xs6 class="text-xs-right pr-2">
               <ConfirmDelete
                 :button-text="`Delete ${switchboard.name}`"
                 :activator-button-loading="deleting"
