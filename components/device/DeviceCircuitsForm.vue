@@ -31,7 +31,22 @@
                         <v-radio label="Single Phase" value="false" />
                       </v-radio-group>
                     </v-flex>
-                    <v-flex xs7 class="pa-0">
+                    <v-flex xs5 class="pa-0">
+                      <v-radio-group
+                        v-if="formData.three_phase == 'false'"
+                        v-model="formData.phase"
+                        :rules="selectRequired"
+                        row
+                      >
+                        <v-radio
+                          v-for="phase in phaseColours"
+                          :key="phase.phase"
+                          :label="phase.label"
+                          :value="phase.phase"
+                        />
+                      </v-radio-group>
+                    </v-flex>
+                    <v-flex xs2 class="pa-0">
                       <v-checkbox
                         v-model="formData.neutral"
                         label="plus Neutral"
@@ -39,7 +54,7 @@
                     </v-flex>
                   </v-layout>
                 </v-flex>
-                <v-flex xs12>
+                <v-flex>
                   <v-layout row>
                     <v-flex xs7>
                       <v-text-field
@@ -49,14 +64,16 @@
                       />
                     </v-flex>
                     <v-flex v-if="showLocation" xs5>
-                      <v-text-field
+                      <v-combobox
                         v-model="formData.location"
+                        :items="areas"
                         label="Location"
+                        hint="Select an existing location or enter a new one"
                       />
                     </v-flex>
                     <v-flex v-if="showFedBySwitchboard" xs5>
                       <v-select
-                        v-model="formData.connectedSwitchboard"
+                        v-model="formData.connected_switchboard"
                         :items="fedByOptions"
                         label="Fed By*"
                         :rules="selectRequired"
@@ -66,7 +83,7 @@
                     </v-flex>
                     <v-flex v-if="showFeedingSwitchboard" xs5>
                       <v-select
-                        v-model="formData.connectedSwitchboard"
+                        v-model="formData.connected_switchboard"
                         :items="feedingOptions"
                         label="Feeding*"
                         :rules="selectRequired"
@@ -80,6 +97,7 @@
                   <v-autocomplete
                     v-model="formData.load_type_id"
                     label="Device Type*"
+                    hint="Start typing the type of device then select one of the options. E.g. air"
                     :items="loadTypes"
                     item-text="label"
                     item-value="id"
@@ -111,10 +129,7 @@
                       />
                     </v-flex>
                     <v-flex xs4>
-                      <v-text-field
-                        v-model="formData.cable_no_cores"
-                        label="Cores"
-                      />
+                      <v-text-field v-model="formData.no_cores" label="Cores" />
                     </v-flex>
                   </v-layout>
                 </v-flex>
@@ -206,7 +221,6 @@ export default {
     feedingOptions: [],
 
     formData: {
-      id: undefined,
       name: '',
       description: '',
       location: '',
@@ -215,7 +229,7 @@ export default {
       neutral: true,
       balanced_load: 'true',
       load_type_id: null,
-      connectedSwitchboard: null,
+      connected_switchboard: null,
       breaker_size: '',
       cable_size: '',
       cable_no_cores: 1,
@@ -224,9 +238,24 @@ export default {
     },
 
     textRequired: [v => v.length > 0 || 'Field is required'],
-    selectRequired: [v => v != null || 'Please select an option']
+    selectRequired: [
+      v => (v != null && v != undefined) || 'Please select an option'
+    ]
   }),
   computed: {
+    areas() {
+      const buildingAreas = this.buildingAreas(this.switchboard.building_id)
+      const areas = []
+      buildingAreas.forEach(area => areas.push(area.name))
+      return areas
+    },
+    phaseColours() {
+      const phases = [1, 2, 3]
+      const colours = this.$store.state.site.phase_colours.filter(colour =>
+        phases.includes(colour.phase)
+      )
+      return colours
+    },
     supplyDevice() {
       const supplyDevice = this.supplyDevice(this.switchboard.id)
       return supplyDevice
@@ -256,6 +285,7 @@ export default {
     }),
     ...mapGetters({
       loadType: 'types/loadType',
+      buildingAreas: 'site/buildingAreas',
       sectionCategories: 'types/sectionCategories',
       supplyDevice: 'site/switchboardSupplyDevice',
       switchboardsByBuilding: 'site/switchboardsByBuilding',
@@ -297,7 +327,6 @@ export default {
       // Add Only Form - reset validation and formData
       this.$refs.form.resetValidation()
       this.formData = {
-        id: undefined,
         name: '',
         description: '',
         location: '',
@@ -306,10 +335,10 @@ export default {
         neutral: true,
         balanced_load: 'true',
         load_type_id: null,
-        connectedSwitchboard: null,
+        connected_switchboard: null,
         breaker_size: '',
         cable_size: '',
-        cable_no_cores: 1,
+        no_cores: 1,
         ct_cable_number: '',
         ct_size: 50
       }
@@ -442,10 +471,14 @@ export default {
       }
       return fedByOptions
     },
-    addDeviceCircuits() {
+    async addDeviceCircuits() {
       if (this.$refs.form.validate()) {
-        console.log(this.formData)
-        // this.saving = true
+        this.saving = true
+        await this.$store.dispatch('site/addDeviceCircuits', {
+          switchboard_id: this.switchboard.id,
+          input: this.formData
+        })
+        this.saving = false
       }
     }
   }

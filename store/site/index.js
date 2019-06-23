@@ -6,7 +6,10 @@ export const state = () => ({
   buildings: [],
   switchboards: [],
   circuits: [],
-  devices: []
+  devices: [],
+  country: {},
+  phase_colours: [],
+  areas: []
 })
 
 export const mutations = {
@@ -19,6 +22,9 @@ export const mutations = {
     if (config.switchboards) state.switchboards = config.switchboards
     if (config.circuits) state.circuits = config.circuits
     if (config.devices) state.devices = config.devices
+    if (config.country) state.country = config.country
+    if (config.phase_colours) state.phase_colours = config.phase_colours
+    if (config.areas) state.areas = config.areas
   },
 
   ADD_ENTITY(state, entity) {
@@ -89,7 +95,40 @@ export const actions = {
     })
   },
 
-  async addDeviceCircuits({ commit }, data) {}
+  async addDeviceCircuits({ commit }, data) {
+    const circuit = {
+      name: data.input.name,
+      description: data.input.description,
+      location: data.input.location,
+      load_type_id: data.input.load_type_id,
+      connected_switchboard: data.input.connected_switchboard,
+      no_cores: data.input.no_cores,
+      breaker_size: data.input.breaker_size,
+      cable_size: data.input.cable_size,
+      ct_number: data.input.ct_cable_number,
+      chassis_no: 0
+    }
+
+    if (data.input.three_phase) {
+      circuit['3ph_load'] = 1
+      circuit.balanced_load = 1
+    } else {
+      circuit['3ph_load'] = 0
+      circuit.balanced_load = 1
+    }
+    if (data.input.phase) {
+      circuit.phase_id = data.input.phase
+    } else {
+      circuit.phase_id = 1
+    }
+
+    const response = await this.$switchboard.addChild(
+      data.switchboard_id,
+      'circuit',
+      circuit
+    )
+    console.log(response)
+  }
 }
 
 export const getters = {
@@ -131,7 +170,22 @@ export const getters = {
 
   switchboardSupplyDevice: state => switchboard_id => {
     return switchboardSupplyDevice(state, switchboard_id)
+  },
+
+  buildingAreas: state => building_id => {
+    return buildingAreas(state, building_id)
   }
+}
+
+/**
+ * Returns the areas in the building specified by building_id
+ * Returns an empty array if no areas defined for this building
+ *
+ * @param state
+ * @param building_id
+ */
+function buildingAreas(state, building_id) {
+  return state.areas.filter(area => area.building_id == building_id)
 }
 
 /**
