@@ -19,6 +19,7 @@
 - rename ct_number to ct_cable_number
 - Add pre-defined areas to location field as options, but still allow user to enter new value
 - handle sub-switchboards
+- Change delete call to destroy for switchboards and buildings to ensure all data is deleted
 
 - Get areas from DB - DONE
 - Get phase colours from DB - DONE

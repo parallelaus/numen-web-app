@@ -21,7 +21,7 @@
           :key="building.id"
           class="mt-3"
         >
-          <v-layout row wrap>
+          <v-layout v-if="view == 'electrical'" row wrap>
             <v-flex xs6>
               <SwitchboardForm
                 :building="building"
@@ -42,8 +42,13 @@
                 :header-text="`Edit ${building.name}`"
               />
             </v-flex>
-            <v-flex class="px-2 pb-2">
+            <v-flex xs12 px-2 pb-2>
               <BuildingElectrical :building="building" />
+            </v-flex>
+          </v-layout>
+          <v-layout v-if="view == 'numen'" row wrap>
+            <v-flex xs12 px-2 pb-2>
+              <BuildingNumen :building="building" />
             </v-flex>
           </v-layout>
         </v-tab-item>
@@ -54,13 +59,16 @@
 
 <script>
 import BuildingElectrical from '@/components/building/BuildingElectrical'
+import BuildingNumen from '@/components/building/BuildingNumen'
 import SwitchboardForm from '@/components/switchboard/SwitchboardForm'
 import BuildingForm from '@/components/building/BuildingForm.vue'
 import ConfirmDelete from '@/components/core/Confirm'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     BuildingElectrical,
+    BuildingNumen,
     SwitchboardForm,
     BuildingForm,
     ConfirmDelete
@@ -80,6 +88,11 @@ export default {
     deleting: false,
     confirmDelete: false
   }),
+  computed: {
+    ...mapState({
+      view: state => state.site.view
+    })
+  },
   methods: {
     async deleteBuilding(building_id) {
       this.deleting = true

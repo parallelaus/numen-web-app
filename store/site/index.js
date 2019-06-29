@@ -1,15 +1,18 @@
 import pluralize from 'pluralize'
 
 export const state = () => ({
+  view: 'electrical', // indicated if electrical or numen view is selected
   sites: [],
   site: {},
   buildings: [],
   switchboards: [],
   circuits: [],
   devices: [],
+  collectors: [],
   country: {},
   phase_colours: [],
-  areas: []
+  areas: [],
+  collectors_ports: []
 })
 
 export const mutations = {
@@ -22,9 +25,25 @@ export const mutations = {
     if (config.switchboards) state.switchboards = config.switchboards
     if (config.circuits) state.circuits = config.circuits
     if (config.devices) state.devices = config.devices
+    if (config.collectors) state.collectors = config.collectors
     if (config.country) state.country = config.country
     if (config.phase_colours) state.phase_colours = config.phase_colours
     if (config.areas) state.areas = config.areas
+
+    // Create Collector/Port/Circuit map
+    // Data is currently drawn from circuits
+    state.collectors_ports = []
+    if (config.circuits) {
+      config.circuits.forEach(circuit => {
+        if (circuit.collector_serial_number && circuit.port) {
+          state.collectors_ports.push({
+            collector: circuit.collector_serial_number,
+            port: circuit.port,
+            circuit: circuit.id
+          })
+        }
+      })
+    }
   },
 
   ADD_ENTITY(state, entity) {
@@ -41,6 +60,21 @@ export const mutations = {
       item => item.id === entity.id
     )
     state[entity.collection].splice(idx, 1)
+  },
+  SET_VIEW(state, view) {
+    const views = ['electrical', 'numen']
+    if (views.includes(view)) {
+      state.view = view
+    }
+  },
+  DISCONNECT_CIRCUIT(state, circuit_id) {
+    const idx = state.collectors_ports.findIndex(
+      item => item.circuit == circuit_id
+    )
+    state.collectors_ports.splice(idx, 1)
+  },
+  CONNECT_CIRCUIT(state, connection) {
+    state.collectors_ports.push(connection)
   }
 }
 
@@ -71,8 +105,9 @@ export const actions = {
       entity: response[entity.childType]
     })
   },
+
   /**
-   * Deletes the given entity
+   * Updates entity
    *
    * @param { type, entity } entity
    */
@@ -83,7 +118,9 @@ export const actions = {
       entity: response[entity.type]
     })
   },
+
   /**
+   * Deletes the given entity
    *
    * @param { type, id } entity
    */
@@ -95,6 +132,11 @@ export const actions = {
     })
   },
 
+  /**
+   * Add a device and circuits to a switchboard
+   *
+   * @param data - form data from DeviceCircuitsForm
+   */
   async addDeviceCircuits({ commit }, data) {
     const circuit = {
       name: data.input.name,
@@ -128,6 +170,26 @@ export const actions = {
       circuit
     )
     console.log(response)
+  },
+
+  /**
+   * Connects circuit to a collector port
+   *
+   * @param { collector, port, circuit } connection
+   */
+  async connectCircuitToCollectorPort({ commit }, connection) {
+    // TODO: Connect circuit API call
+    commit('CONNECT_CIRCUIT', connection)
+  },
+
+  /**
+   * Disconnects circuit from a collector port
+   *
+   * @param data
+   */
+  async disconnectCircuitFromCollectorPort({ commit }, circuit_id) {
+    // TODO: Disconnect circuit API call
+    commit('DISCONNECT_CIRCUIT', circuit_id)
   }
 }
 
@@ -154,6 +216,14 @@ export const getters = {
 
   switchboardsByBuilding: state => building_id => {
     return switchboardsByBuilding(state, building_id)
+  },
+
+  collectorsByBuilding: state => building_id => {
+    return collectorsByBuilding(state, building_id)
+  },
+
+  circuitsByCollector: state => serial_number => {
+    return circuitsByCollector(state, serial_number)
   },
 
   devicesBySwitchboard: state => switchboard_id => {
@@ -294,6 +364,26 @@ function circuitsByDevice(state, device_id) {
 }
 
 /**
+ * Returns a Map object of all the circuits currently attached to the collector
+ * specified by serial_number.
+ *
+ * @param state
+ * @param serial_number
+ */
+function circuitsByCollector(state, serial_number) {
+  const portMap = new Map()
+  state.collectors_ports.forEach(collector_port => {
+    if (collector_port.collector == serial_number) {
+      const circuit = state.circuits.find(
+        circuit => circuit.id == collector_port.circuit
+      )
+      portMap.set(collector_port.port, circuit)
+    }
+  })
+  return portMap
+}
+
+/**
  * Returns an array of switchboards contained in the building
  * specified by building_id
  *
@@ -303,6 +393,19 @@ function circuitsByDevice(state, device_id) {
 function switchboardsByBuilding(state, building_id) {
   return state.switchboards.filter(
     switchboard => switchboard.building_id == building_id
+  )
+}
+
+/**
+ * Returns an array of collectors contained in the building
+ * specified by building_id
+ *
+ * @param state
+ * @param building_id
+ */
+function collectorsByBuilding(state, building_id) {
+  return state.collectors.filter(
+    collector => collector.building_id == building_id
   )
 }
 

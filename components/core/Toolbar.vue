@@ -102,7 +102,7 @@ export default {
       this.$store.dispatch('user/logout')
     },
     toggleTechMode() {
-      this.$store.dispatch('toggleTechMode')
+      this.$store.commit('TOGGLE_TECH_MODE')
     }
   }
 }

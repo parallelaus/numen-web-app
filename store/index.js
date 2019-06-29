@@ -7,9 +7,3 @@ export const mutations = {
     state.techMode = !state.techMode
   }
 }
-
-export const actions = {
-  toggleTechMode({ commit }) {
-    commit('TOGGLE_TECH_MODE')
-  }
-}
