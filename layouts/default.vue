@@ -1,9 +1,9 @@
 <template>
   <v-app id="installer">
-    <div v-if="noRole">
+    <div v-if="!loggedIn">
       <Login />
     </div>
-    <div v-if="hasRole('installer')">
+    <div v-if="loggedIn">
       <Toolbar />
       <v-content>
         <nuxt />
@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      noRole: 'user/noRole',
+      loggedIn: 'user/loggedIn',
       hasRole: 'user/hasRole'
     })
   }

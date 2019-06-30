@@ -3,15 +3,14 @@
 - Global error handling for server errors such as server not available or 500 errors
 - Add entity description as tooltips
 - convert store.site to an array of site configs already loaded and do not reload if site is already loaded.
-- Store/Retrieve state from local storage
+- Store/Retrieve types from local storage and only load from API when not available
+- Remove redundant methods where method is direct copy of getter method e.g. CircuitCard phaseColour. See default view where hasRole is called with no additional method
+- Log out user and show login screen whenever an unauthorised resonse is received from API
 
 # Authentication
 
 - Auto-login and token refresh
-
-# Dashboard
-
-- Add stats graph
+- Get user roles from the API
 
 # Site
 
@@ -31,3 +30,26 @@
 # API
 
 - Add all circuit devices to site config data, not only connected to collectors
+- Circuit connect/disconnect methods
+
+# Dashboard
+
+- Add stats graph
+
+```
+async autoLogin({ commit }) {
+    console.log('attempting autologin')
+    const token = JSON.parse(localStorage.getItem('token'))
+    const expires = localStorage.getItem('expires')
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (token && expires && user) {
+      if (Date.now() < expires - 30000) {
+        // assume token is still valid
+        commit('SET_TOKEN', token)
+        commit('SET_USER', user)
+
+        console.log('User auto login')
+      }
+    }
+  },
+```

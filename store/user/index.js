@@ -1,6 +1,5 @@
 export const state = () => ({
-  roles: [],
-  token: {},
+  user: undefined,
   access: {
     techMode: {
       access: true // user can access tech mode
@@ -18,36 +17,35 @@ export const state = () => ({
 })
 
 export const mutations = {
-  SET_TOKEN(state, token) {
-    state.token = token
-    localStorage.setItem('token', JSON.stringify(token))
-
-    // Set the access_token globally for API access
-    this.$axios.setToken(token.access_token, 'Bearer')
+  LOGIN(state, user) {
+    state.user = user
+    localStorage.setItem('user', JSON.stringify(user))
+    this.$axios.setToken(user.token.access_token, 'Bearer')
   },
   LOGOUT(state) {
-    state.token = null
-    state.roles = []
-    localStorage.removeItem('token')
+    state.user = undefined
     localStorage.removeItem('user')
     this.$axios.setToken(false)
-  },
-  SET_USER(state, user) {
-    state.roles = user.roles
-
-    // Removes global access_token
-    localStorage.setItem('user', JSON.stringify(user))
   }
 }
 
 export const actions = {
   async login({ commit }, credentials) {
     try {
+      // Get token from Auth service
       const token = await this.$auth.token(credentials)
 
+      // Get user roles
+      // TODO: get user roles from the API
+      const roles = ['installer']
+
       if (token) {
-        commit('SET_TOKEN', token)
-        commit('SET_USER', { roles: ['installer'] })
+        const user = {
+          token,
+          expires: Date.now() + token.expires_in * 1000,
+          roles
+        }
+        commit('LOGIN', user)
         console.log('User login successful. Username: ' + credentials.username)
       }
       return true
@@ -71,10 +69,10 @@ export const actions = {
 }
 
 export const getters = {
-  hasRole: state => role => {
-    return state.roles.includes(role)
+  loggedIn: state => {
+    return state.user != undefined
   },
-  noRole: state => {
-    return state.roles.length == 0
+  hasRole: state => role => {
+    return state.user.roles.includes(role)
   }
 }
