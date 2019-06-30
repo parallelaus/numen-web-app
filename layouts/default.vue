@@ -37,8 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      loggedIn: 'user/loggedIn',
-      hasRole: 'user/hasRole'
+      loggedIn: 'user/loggedIn'
     })
   }
 }

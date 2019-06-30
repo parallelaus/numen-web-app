@@ -48,13 +48,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      phaseColourByPhase: 'site/phaseColour'
+      phaseColour: 'site/phaseColour'
     })
   },
   methods: {
-    phaseColour(phase) {
-      return this.phaseColourByPhase(phase)
-    },
     canAddCircuitsToDevice(device) {
       // Single phase loads
       if (device['3ph_load'] == 0 && device.circuits.length >= 1) {

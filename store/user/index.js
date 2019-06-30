@@ -19,12 +19,15 @@ export const state = () => ({
 export const mutations = {
   LOGIN(state, user) {
     state.user = user
-    localStorage.setItem('user', JSON.stringify(user))
-    this.$axios.setToken(user.token.access_token, 'Bearer')
+    if (process.client) {
+      localStorage.setItem('user', JSON.stringify(user))
+      this.$cookies.set('user', user)
+    }
   },
   LOGOUT(state) {
     state.user = undefined
     localStorage.removeItem('user')
+    this.$cookies.remove('user')
     this.$axios.setToken(false)
   }
 }
@@ -46,7 +49,7 @@ export const actions = {
           roles
         }
         commit('LOGIN', user)
-        console.log('User login successful. Username: ' + credentials.username)
+        console.log('user login')
       }
       return true
     } catch (error) {
@@ -64,7 +67,7 @@ export const actions = {
   },
   logout({ commit }) {
     commit('LOGOUT')
-    console.log('User logout')
+    console.log('user logout')
   }
 }
 
@@ -74,5 +77,8 @@ export const getters = {
   },
   hasRole: state => role => {
     return state.user.roles.includes(role)
+  },
+  tokenExpired: state => {
+    state.user != undefined && Date.now() > state.user.expires ? true : false
   }
 }

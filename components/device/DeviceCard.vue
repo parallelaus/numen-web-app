@@ -88,18 +88,10 @@ export default {
       }
     },
     ...mapGetters({
-      loadTypeById: 'types/loadType',
-      loadCategoryById: 'types/loadCategory',
+      loadType: 'types/loadType',
+      loadCategory: 'types/loadCategory',
       isSupplyDevice: 'site/isSupplyDevice'
     })
-  },
-  methods: {
-    loadType(id) {
-      return this.loadTypeById(id)
-    },
-    loadCategory(id) {
-      return this.loadCategoryById(id)
-    }
   }
 }
 </script>

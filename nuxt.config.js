@@ -4,6 +4,10 @@ import pkg from './package'
 export default {
   mode: 'universal',
 
+  router: {
+    middleware: 'auto-login'
+  },
+
   head: {
     title: 'Numen Installer',
     meta: [
@@ -29,9 +33,9 @@ export default {
 
   css: ['~/assets/style/app.styl'],
 
-  plugins: ['@/plugins/vuetify', '@/plugins/api'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/dotenv', 'cookie-universal-nuxt'],
 
-  modules: ['@nuxtjs/axios', '@nuxtjs/dotenv'],
+  plugins: ['@/plugins/axios', '@/plugins/vuetify', '@/plugins/api'],
 
   axios: {},
 

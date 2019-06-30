@@ -116,20 +116,12 @@ export default {
     },
     ...mapGetters({
       switchboardsByBuilding: 'site/switchboardsByBuilding',
-      devicesBySwitchboard: 'site/devicesBySwitchboard',
-      circuitsByDevice: 'site/circuitsByDevice',
+      getSwitchboardDevices: 'site/devicesBySwitchboard',
+      getDeviceCircuits: 'site/circuitsByDevice',
       fedBySwitchboard: 'site/fedBySwitchboard'
     })
   },
   methods: {
-    getDeviceCircuits(device_id) {
-      return this.circuitsByDevice(device_id)
-    },
-
-    getSwitchboardDevices(switchboard_id) {
-      return this.devicesBySwitchboard(switchboard_id)
-    },
-
     getFedBySwitchboard(switchboard_id) {
       const fbSwitchboard = this.fedBySwitchboard(switchboard_id)
       if (!fbSwitchboard) {

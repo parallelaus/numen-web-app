@@ -49,7 +49,7 @@
             build
           </v-icon>
         </v-btn>
-        <v-btn icon @click="logout">
+        <v-btn icon router to="/" @click="logout">
           <v-icon>
             exit_to_app
           </v-icon>

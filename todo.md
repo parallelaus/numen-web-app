@@ -4,13 +4,14 @@
 - Add entity description as tooltips
 - convert store.site to an array of site configs already loaded and do not reload if site is already loaded.
 - Store/Retrieve types from local storage and only load from API when not available
-- Remove redundant methods where method is direct copy of getter method e.g. CircuitCard phaseColour. See default view where hasRole is called with no additional method
-- Log out user and show login screen whenever an unauthorised resonse is received from API
+
+- Log out user and show login screen whenever an unauthorised resonse is received from API - DONE
+- Remove redundant methods where method is direct copy of getter method e.g. CircuitCard phaseColour. See default view where hasRole is called with no additional method - DONE
 
 # Authentication
 
-- Auto-login and token refresh
 - Get user roles from the API
+- Auto-login and token refresh - DONE
 
 # Site
 
