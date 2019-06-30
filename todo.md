@@ -2,9 +2,9 @@
 
 - Global error handling for server errors such as server not available or 500 errors
 - Add entity description as tooltips
-- convert store.site to an array of site configs already loaded and do not reload if site is already loaded.
-- Store/Retrieve types from local storage and only load from API when not available
+- Implement local storage caching of site config
 
+- Store/Retrieve types from local storage and only load from API when not available - DONE
 - Log out user and show login screen whenever an unauthorised resonse is received from API - DONE
 - Remove redundant methods where method is direct copy of getter method e.g. CircuitCard phaseColour. See default view where hasRole is called with no additional method - DONE
 
