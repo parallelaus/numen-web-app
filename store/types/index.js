@@ -8,28 +8,71 @@ export const state = () => ({
 export const mutations = {
   SET_LOAD_CATEGORIES(state, categories) {
     state.load_categories = categories.sort(orderBy)
+    if (process.client) {
+      localStorage.setItem(
+        'load_categories',
+        JSON.stringify(state.load_categories)
+      )
+    }
   },
   SET_LOAD_TYPES(state, types) {
     state.load_types = types.sort(orderBy)
+    if (process.client) {
+      localStorage.setItem('load_types', JSON.stringify(state.load_types))
+    }
   },
   SET_BUILDING_TYPES(state, types) {
     state.building_types = types
+    if (process.client) {
+      localStorage.setItem(
+        'building_types',
+        JSON.stringify(state.building_types)
+      )
+    }
   },
   SET_CT_TYPES(state, types) {
     state.ct_types = types
+    if (process.client) {
+      localStorage.setItem('ct_types', JSON.stringify(state.ct_types))
+    }
   }
 }
 
 export const actions = {
   async fetchAll({ commit }) {
-    const load = await this.$types.fetchLoadCategoriesAndTypes()
+    let load = {}
+    let building = {}
+    let cts = {}
+
+    if (process.client) {
+      load = {
+        load_categories: JSON.parse(localStorage.getItem('load_categories')),
+        load_types: JSON.parse(localStorage.getItem('load_types'))
+      }
+      building = {
+        building_types: JSON.parse(localStorage.getItem('building_types'))
+      }
+      cts = {
+        ct_types: JSON.parse(localStorage.getItem('ct_types'))
+      }
+    }
+    if (!load.load_categories || !load.load_types) {
+      console.log('loading load categories and types from api')
+      load = await this.$types.fetchLoadCategoriesAndTypes()
+    }
     commit('SET_LOAD_CATEGORIES', load.load_categories)
     commit('SET_LOAD_TYPES', load.load_types)
 
-    const building = await this.$types.fetchBuildingTypes()
+    if (!building.building_types) {
+      console.log('loading building types from api')
+      building = await this.$types.fetchBuildingTypes()
+    }
     commit('SET_BUILDING_TYPES', building.building_types)
 
-    const cts = await this.$types.fetchCtTypes()
+    if (!cts.ct_types) {
+      console.log('loading ct types from api')
+      cts = await this.$types.fetchCtTypes()
+    }
     commit('SET_CT_TYPES', cts.ct_types)
   }
 }

@@ -22,13 +22,16 @@ export const mutations = {
     if (process.client) {
       localStorage.setItem('user', JSON.stringify(user))
       this.$cookies.set('user', user)
+      this.$axios.setToken(user.token.access_token, 'Bearer')
     }
   },
   LOGOUT(state) {
     state.user = undefined
-    localStorage.removeItem('user')
-    this.$cookies.remove('user')
-    this.$axios.setToken(false)
+    if (process.client) {
+      localStorage.removeItem('user')
+      this.$cookies.remove('user')
+      this.$axios.setToken(false)
+    }
   }
 }
 

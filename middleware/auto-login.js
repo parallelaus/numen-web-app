@@ -4,10 +4,8 @@ export default function({ app, store, req }) {
 
     let user = undefined
     if (process.server) {
-      // User can only be in a Cookie, if not, we cannot auto authenticate
       user = app.$cookies.get('user')
     } else {
-      // We are on the client, try to get user from local storage
       const jsonUser = localStorage.getItem('user')
       user = jsonUser ? JSON.parse(jsonUser) : undefined
     }

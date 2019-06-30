@@ -11,6 +11,7 @@
 # Authentication
 
 - Get user roles from the API
+- Implement refresh token
 - Auto-login and token refresh - DONE
 
 # Site

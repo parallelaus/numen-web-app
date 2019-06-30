@@ -1,6 +1,6 @@
 <template>
   <div>
-<v-container grid-list-xs fluid pa-0>
+    <v-container grid-list-xs fluid pa-0>
       <v-layout row wrap>
         <v-flex xs11 pl-3 pt-3>
           <span>
@@ -56,6 +56,7 @@ import BuildingForm from '@/components/building/BuildingForm.vue'
 import RefreshButton from '@/components/core/RefreshButton'
 
 export default {
+  middleware: 'load-types',
   head() {
     return {
       title: this.site.name

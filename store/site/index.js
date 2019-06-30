@@ -18,6 +18,9 @@ export const state = () => ({
 export const mutations = {
   SET_SITES(state, sites) {
     state.sites = sites
+    if (process.client) {
+      localStorage.setItem('sites', JSON.stringify(state.sites))
+    }
   },
   SET_SITE_CONFIG(state, config) {
     state.site = config.site
@@ -80,8 +83,17 @@ export const mutations = {
 
 export const actions = {
   async fetchSites({ commit }) {
-    const response = await this.$site.index()
-    commit('SET_SITES', response.sites)
+    let sites = {}
+    if (process.client) {
+      sites = {
+        sites: JSON.parse(localStorage.getItem('sites'))
+      }
+    }
+    if (!sites.sites) {
+      console.log('loading site list from api')
+      sites = await this.$site.index()
+    }
+    commit('SET_SITES', sites.sites)
   },
 
   async fetchSiteConfig({ commit }, id) {

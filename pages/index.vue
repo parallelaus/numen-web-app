@@ -16,7 +16,7 @@ export default {
   }),
   mounted() {
     // Load the all system options
-    this.$store.dispatch('types/fetchAll')
+    // this.$store.dispatch('types/fetchAll')
   }
 }
 </script>
