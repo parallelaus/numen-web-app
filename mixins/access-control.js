@@ -1,7 +1,7 @@
 export default {
   methods: {
     /**
-     * Returns true is a user has the requested right and false otherwise
+     * Returns true if a user has the requested right and false otherwise
      * E.g. siteConfig.view, siteData.export etc.
      *
      * @param {right

@@ -57,20 +57,17 @@ export const actions = {
       }
     }
     if (!load.load_categories || !load.load_types) {
-      console.log('loading load categories and types from api')
       load = await this.$types.fetchLoadCategoriesAndTypes()
     }
     commit('SET_LOAD_CATEGORIES', load.load_categories)
     commit('SET_LOAD_TYPES', load.load_types)
 
     if (!building.building_types) {
-      console.log('loading building types from api')
       building = await this.$types.fetchBuildingTypes()
     }
     commit('SET_BUILDING_TYPES', building.building_types)
 
     if (!cts.ct_types) {
-      console.log('loading ct types from api')
       cts = await this.$types.fetchCtTypes()
     }
     commit('SET_CT_TYPES', cts.ct_types)

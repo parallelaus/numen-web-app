@@ -11,12 +11,7 @@
             <p class="ma-0">{{ site.address }}</p>
           </span>
         </v-flex>
-        <v-flex xs1 pt-0>
-          <RefreshButton
-            :refreshing="refreshing"
-            @click="refreshSiteConfig()"
-          />
-        </v-flex>
+        <v-flex xs1 pt-0  />
       </v-layout>
     </v-container>
     <v-container fluid pa-0 px-2>
@@ -53,7 +48,6 @@
 import { mapGetters } from 'vuex'
 import BuildingTabs from '@/components/building/BuildingTabs.vue'
 import BuildingForm from '@/components/building/BuildingForm.vue'
-import RefreshButton from '@/components/core/RefreshButton'
 
 export default {
   middleware: 'load-types',
@@ -64,12 +58,8 @@ export default {
   },
   components: {
     BuildingTabs,
-    BuildingForm,
-    RefreshButton
+    BuildingForm
   },
-  data: () => ({
-    refreshing: false
-  }),
   computed: {
     view: {
       get() {
@@ -85,16 +75,9 @@ export default {
     })
   },
   async fetch({ store, params }) {
-    if (params.id != store.state.site.site.id) {
-      await store.dispatch('site/fetchSiteConfig', params.id)
-    }
+    await store.dispatch('site/fetchSiteConfig', params.id)
   },
   methods: {
-    async refreshSiteConfig() {
-      this.refreshing = true
-      await this.$store.dispatch('site/fetchSiteConfig', this.site.id)
-      this.refreshing = false
-    },
     selectView(view) {
       this.$store.commit('site/SET_VIEW', view)
     }

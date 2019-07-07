@@ -1,4 +1,10 @@
 import pluralize from 'pluralize'
+import {
+  setItemInArray,
+  getItemFromArray,
+  getItem,
+  setItem
+} from '@/utils/local-storage'
 
 export const state = () => ({
   view: 'electrical', // indicated if electrical or numen view is selected
@@ -18,12 +24,13 @@ export const state = () => ({
 export const mutations = {
   SET_SITES(state, sites) {
     state.sites = sites
-    if (process.client) {
-      localStorage.setItem('sites', JSON.stringify(state.sites))
-    }
+    setItem('sites', sites)
   },
+
   SET_SITE_CONFIG(state, config) {
     state.site = config.site
+    setItemInArray('site_map', state.site.id, config)
+
     if (config.buildings) state.buildings = config.buildings
     if (config.switchboards) state.switchboards = config.switchboards
     if (config.circuits) state.circuits = config.circuits
@@ -83,22 +90,21 @@ export const mutations = {
 
 export const actions = {
   async fetchSites({ commit }) {
-    let sites = {}
-    if (process.client) {
-      sites = {
-        sites: JSON.parse(localStorage.getItem('sites'))
-      }
+    let sites = {
+      sites: getItem('sites')
     }
     if (!sites.sites) {
-      console.log('loading site list from api')
       sites = await this.$site.index()
     }
     commit('SET_SITES', sites.sites)
   },
 
   async fetchSiteConfig({ commit }, id) {
-    const response = await this.$siteConfig.fetch(id)
-    commit('SET_SITE_CONFIG', response)
+    let siteConfig = getItemFromArray('site_map', id)
+    if (!siteConfig) {
+      siteConfig = await this.$siteConfig.fetch(id)
+    }
+    commit('SET_SITE_CONFIG', siteConfig)
   },
 
   /**

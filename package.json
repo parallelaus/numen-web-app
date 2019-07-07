@@ -5,26 +5,33 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore ."
+    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
+    "unit": "jest"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
     "@nuxtjs/dotenv": "^1.3.0",
-    "babel-eslint": "^10.0.1",
     "cookie-universal-nuxt": "^2.0.16",
+    "nuxt": "^2.8.1",
+    "pluralize": "^8.0.0",
+    "vuetify": "^1.5.16",
+    "vuetify-loader": "^1.2.2"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-core": "^7.0.0-0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.8.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.2.2",
-    "nuxt": "^2.8.1",
-    "pluralize": "^8.0.0",
+    "jest": "^24.8.0",
+    "jest-localstorage-mock": "^2.4.0",
     "prettier": "^1.18.2",
-    "vuetify-loader": "^1.2.2"
-  },
-  "devDependencies": {
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vuetify": "^1.5.16"
+    "vue-jest": "^3.0.4"
   }
 }

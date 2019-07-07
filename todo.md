@@ -2,7 +2,7 @@
 
 - Global error handling for server errors such as server not available or 500 errors
 - Add entity description as tooltips
-- Implement local storage caching of site config
+- Implement generic localStorage caching system to allow loading of data from local storage if available. Needs to also update localStorage when API is updated - event/watch type of solution
 
 - Store/Retrieve types from local storage and only load from API when not available - DONE
 - Log out user and show login screen whenever an unauthorised resonse is received from API - DONE

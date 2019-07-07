@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: core/Login renders correctly 1`] = `
+<v-content-stub
+  tag="main"
+>
+  <v-container-stub
+    fluid=""
+    tag="div"
+  >
+    <v-layout-stub
+      justify-center=""
+      tag="div"
+    >
+      <v-flex-stub
+        lg4=""
+        md6=""
+        sm8=""
+        tag="div"
+        xl3=""
+        xs12=""
+      >
+        <v-card-stub
+          class="elevation-2"
+          tag="div"
+        >
+          <v-toolbar-stub
+            class="elevation-2 blue darken-4"
+            dark="true"
+            scrollthreshold="300"
+          >
+            <v-toolbar-title-stub
+              class="title font-weight-thin text-capitalize"
+            >
+              <img
+                alt="Home"
+                src="~/assets/images/numen-logo.svg"
+              />
+            </v-toolbar-title-stub>
+          </v-toolbar-stub>
+           
+          <v-card-text-stub>
+            <v-form-stub>
+              <v-text-field-stub
+                label="Email Address"
+                prepend-icon="person"
+                rules="v => v.length > 0 || 'Please enter your email address'"
+                value=""
+              />
+               
+              <v-text-field-stub
+                label="Password"
+                prepend-icon="lock"
+                rules="v => v.length > 0 || 'Please enter your password'"
+                type="password"
+                value=""
+              />
+            </v-form-stub>
+          </v-card-text-stub>
+           
+          <v-card-actions-stub>
+            <!---->
+             
+            <v-spacer-stub />
+             
+            <v-btn-stub
+              activeclass="v-btn--active"
+              color="primary"
+              tag="button"
+              type="button"
+            >
+              
+              Login
+            
+            </v-btn-stub>
+          </v-card-actions-stub>
+        </v-card-stub>
+      </v-flex-stub>
+    </v-layout-stub>
+  </v-container-stub>
+</v-content-stub>
+`;
