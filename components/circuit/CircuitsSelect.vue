@@ -1,6 +1,10 @@
 <template>
   <v-list class="pa-0">
-    <v-list-group v-for="switchboard in switchboards" :key="switchboard.id">
+    <v-list-group
+      v-for="switchboard in switchboards"
+      :key="switchboard.id"
+      class="pb-1"
+    >
       <v-list-tile slot="activator">
         <v-list-tile-title>
           {{ switchboard.name }}
@@ -11,8 +15,6 @@
         :key="device.id"
         class="ma-2 pr-1 pb-1"
         color="blue lighten-3"
-        draggable
-        hover
         @dragstart.self="pickUpDevice($event, device.id)"
       >
         <v-layout row wrap>
@@ -27,7 +29,7 @@
             <v-layout row wrap align-center>
               <v-flex xs1>
                 <span>
-                  <v-icon>drag_indicator</v-icon>
+                  <!-- <v-icon>drag_indicator</v-icon> -->
                 </span>
               </v-flex>
               <v-flex xs11>
@@ -96,14 +98,12 @@ export default {
       })
     },
     pickUpCircuit(e, circuit_id) {
-      console.log('Picked up Circuit ID: ' + circuit_id)
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.dropEffect = 'move'
 
       e.dataTransfer.setData('circuit_id', circuit_id)
     },
     pickUpDevice(e, device_id) {
-      console.log('Picked up Device ID: ' + device_id)
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.dropEffect = 'move'
 

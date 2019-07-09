@@ -39,17 +39,19 @@
                               collector.serial_number,
                               port
                             )
+                            circuitDragOut($event)
                           "
-                          @dragover.prevent="dragOver($event, port)"
+                          @dragover.prevent="circuitDragOver($event)"
                           @dragenter.prevent
+                          @dragleave.prevent="circuitDragOut($event)"
                         >
                           <v-card flat class="grey lighten-2">
                             <v-card-title class="grey--text">
-                              Drag Circuit or Device here to attach to Collector
+                              Drag Circuit here to attach to Collector Port
                             </v-card-title>
                           </v-card>
                         </v-flex>
-                        <v-flex v-if="getPortCircuit(port)" xs10 sm11>
+                        <v-flex v-if="getPortCircuit(port)" xs10 sm11 d-flex>
                           <v-card
                             v-if="getPortCircuit(port)"
                             class="blue lighten-4"
@@ -106,6 +108,13 @@ export default {
     })
   },
   methods: {
+    hoverOverCircuit(collector, port) {
+      return this.dragOverCircuit.collector == collector &&
+        this.dragOverCircuit.port == port
+        ? 'drag-over-circuit'
+        : ''
+    },
+
     getPortCircuit(port) {
       return this.circuitsByCollector(this.collector.serial_number).get(port)
     },
@@ -117,32 +126,28 @@ export default {
     },
     async connectCircuit(e, collector, port) {
       const circuit_id = e.dataTransfer.getData('circuit_id')
+      console.log(' Dropping circuit ' + circuit_id)
       await this.$store.dispatch('site/connectCircuitToCollectorPort', {
         collector,
         port,
         circuit: circuit_id
       })
-      console.log(
-        'Attaching circuit id ' +
-          circuit_id +
-          ' to collector ' +
-          collector +
-          ' port ' +
-          port
-      )
     },
-    dragOver(e, port) {
-      console.log('Dragging circuit over port ' + port)
+    circuitDragOver(e) {
+      e.toElement.classList.add('drag-over-circuit')
+    },
+    circuitDragOut(e) {
+      e.toElement.classList.remove('drag-over-circuit')
     }
   }
 }
 </script>
 
 <style scoped>
-.empty-port {
-  height: 53px;
+.drag-over-circuit {
+  height: 52px;
   border-style: dashed;
-  border-width: 1px;
-  border-color: grey;
+  border-width: 3px;
+  border-color: darkgray;
 }
 </style>
