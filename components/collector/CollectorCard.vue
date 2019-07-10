@@ -73,9 +73,9 @@
                                         ).label
                                       }}
                                     </span>
-                                    <span class="caption font-weight-thin pl-4">
+                                    <!-- <span class="caption font-weight-thin pl-4">
                                       {{ getPortCircuit(port).location }}
-                                    </span>
+                                    </span> -->
                                     <br />
                                     <span v-if="!getPortCircuit(port).ct_number" class="pl-2">
                                       <span class="caption font-weight-medium">
