@@ -1,9 +1,20 @@
 <template>
   <v-list class="pa-0">
+    <v-card v-if="switchboards.length == 0" flat color="transparent">
+      <v-card-title>
+        <v-icon color="green">
+          check
+        </v-icon>
+        <span class="pl-2 green--text subheading font-weight-meduim">
+          All circuits connected
+        </span>
+      </v-card-title>
+    </v-card>
+
     <v-list-group
       v-for="switchboard in switchboards"
       :key="switchboard.id"
-      class="pb-1"
+      class="pb-1 elevation-4"
     >
       <v-list-tile slot="activator">
         <v-list-tile-title>
@@ -15,14 +26,20 @@
         :key="device.id"
         class="ma-2 pr-1 pb-1"
         color="blue lighten-3"
+        flat
         @dragstart.self="pickUpDevice($event, device.id)"
       >
         <v-layout row wrap>
           <v-flex xs12>
-            <v-card-title primary-title class="pa-1">
-              <span class="subheadline">
-                {{ device.name }}
-              </span>
+            <v-card-title primary-title class="pa-0 pt-1 pl-1">
+              <div class="pa-0">
+                <span class="subheading font-weight-bold pa-0">
+                  {{ device.name }}
+                </span>
+                <p class="caption ma-0 pa-0 pl-2">
+                  {{ device.location }}
+                </p>
+              </div>
             </v-card-title>
           </v-flex>
           <v-flex xs12>
@@ -45,7 +62,25 @@
                   <v-card-title class="pa-0 py-2">
                     <span>
                       <v-icon>drag_indicator</v-icon>
-                      {{ circuit.name }}
+                    </span>
+                    <span class="subheading font-weight-medium">
+                      {{ phaseColour(circuit.phase_id).label }}
+                    </span>
+                    <span v-if="!circuit.ct_number" class="pl-2">
+                      <span class="caption font-weight-medium">
+                        CT:
+                      </span>
+                      <span class="caption font-weight-thin">
+                        {{ circuit.ct_type_id }}A
+                      </span>
+                    </span>
+                    <span v-if="circuit.ct_number" class="pl-2">
+                      <span class="caption font-weight-medium">
+                        CT:
+                      </span>
+                      <span class="caption font-weight-thin">
+                        {{ circuit.ct_number }} ({{ circuit.ct_type_id }}A)
+                      </span>
                     </span>
                   </v-card-title>
                 </v-card>
@@ -78,7 +113,8 @@ export default {
       switchboardsByBuilding: 'site/switchboardsByBuilding',
       collectorsByBuilding: 'site/collectorsByBuilding',
       devicesBySwitchboard: 'site/devicesBySwitchboard',
-      circuitsByDevice: 'site/circuitsByDevice'
+      circuitsByDevice: 'site/circuitsByDevice',
+      phaseColour: 'site/phaseColour'
     })
   },
   methods: {

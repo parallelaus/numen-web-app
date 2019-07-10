@@ -1,19 +1,20 @@
 <template>
-  <v-container fluid grid-list-xs pa-0>
+  <v-container fluid grid-list-sm pa-0>
     <v-layout row wrap>
       <v-flex xs12>
         <v-container fluid pa-0 pb-2>
           <v-layout row wrap>
             <v-flex xs4 sm3 d-flex>
               <v-card class="green lighten-3">
-                <v-card-title>
-                  <p>
+                <v-card-text>
+                  <span class="headline font-weight-medium">
                     {{ collector.name }}
-                  </p>
-                  <p>
+                  </span>
+                  <br />
+                  <span class="subheading">
                     {{ collector.serial_number }}
-                  </p>
-                </v-card-title>
+                  </span>
+                </v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs8 sm9>
@@ -24,15 +25,18 @@
                       <v-layout row wrap>
                         <v-flex xs2 sm1 d-flex>
                           <v-card class="blue lighten-3">
-                            <v-card-title>
+                            <v-card-text
+                              class="text-xs-center subheading font-weight-medium"
+                            >
                               {{ port }}
-                            </v-card-title>
+                            </v-card-text>
                           </v-card>
                         </v-flex>
                         <v-flex
                           v-if="!getPortCircuit(port)"
                           xs10
                           sm11
+                          d-flex
                           @drop="
                             connectCircuit(
                               $event,
@@ -45,9 +49,9 @@
                           @dragenter.prevent
                           @dragleave.prevent="circuitDragOut($event)"
                         >
-                          <v-card flat class="grey lighten-2">
-                            <v-card-title class="grey--text">
-                              Drag Circuit here to attach to Collector Port
+                          <v-card color="grey lighten-4" flat>
+                            <v-card-title>
+                              &nbsp;
                             </v-card-title>
                           </v-card>
                         </v-flex>
@@ -59,11 +63,55 @@
                             <v-container fluid pa-1>
                               <v-layout row-wrap>
                                 <v-flex xs11>
-                                  <v-card-title class="pa-0">
-                                    {{ getPortCircuit(port).name }}
-                                  </v-card-title>
+                                  <v-card-text primary-title class="pa-0">
+                                    <span
+                                      class="subheading font-weight-medium ma-0 pa-0"
+                                    >
+                                      {{ getPortCircuit(port).name }} - {{
+                                        phaseColour(
+                                          getPortCircuit(port).phase_id
+                                        ).label
+                                      }}
+                                    </span>
+                                    <span class="caption font-weight-thin pl-4">
+                                      {{ getPortCircuit(port).location }}
+                                    </span>
+                                    <br />
+                                    <span v-if="!getPortCircuit(port).ct_number" class="pl-2">
+                                      <span class="caption font-weight-medium">
+                                        CT:
+                                      </span>
+                                      <span class="caption font-weight-thin">
+                                        {{ getPortCircuit(port).ct_type_id }}A
+                                      </span>
+                                    </span>
+                                    <span v-if="getPortCircuit(port).ct_number" class="pl-2">
+                                      <span class="caption font-weight-medium">
+                                        CT:
+                                      </span>
+                                      <span class="caption font-weight-thin">
+                                        {{ getPortCircuit(port).ct_number }} ({{ getPortCircuit(port).ct_type_id }}A)
+                                      </span>
+                                    </span>
+                                    <span v-if="getPortCircuit(port).breaker_size" class="pl-2">
+                                      <span class="caption font-weight-medium">
+                                        Breaker Size:
+                                      </span>
+                                      <span class="caption font-weight-thin">
+                                        {{ getPortCircuit(port).breaker_size }}A
+                                      </span>
+                                    </span>
+                                    <span v-if="getPortCircuit(port).cable_size" class="pl-2">
+                                      <span class="caption font-weight-medium">
+                                        Cable:
+                                      </span>
+                                      <span class="caption font-weight-thin">
+                                        {{ getPortCircuit(port).cable_size }}
+                                      </span>
+                                    </span>
+                                  </v-card-text>
                                 </v-flex>
-                                <v-flex xs1>
+                                <v-flex xs1 class="text-xs-right">
                                   <v-btn
                                     ma-0
                                     small
@@ -72,8 +120,12 @@
                                       disconnectCircuit(getPortCircuit(port).id)
                                     "
                                   >
-                                    <v-icon>link_off</v-icon>
+                                    <v-icon color="grey darken-2">
+                                      delete_outline
+                                    </v-icon>
                                   </v-btn>
+                                  </span></span>
+                                  </v-card-text>
                                 </v-flex>
                               </v-layout>
                             </v-container>
@@ -104,7 +156,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      circuitsByCollector: 'site/circuitsByCollector'
+      circuitsByCollector: 'site/circuitsByCollector',
+      phaseColour: 'site/phaseColour'
     })
   },
   methods: {
@@ -145,7 +198,7 @@ export default {
 
 <style scoped>
 .drag-over-circuit {
-  height: 52px;
+  height: 56px;
   border-style: dashed;
   border-width: 3px;
   border-color: darkgray;

@@ -6,7 +6,7 @@
           <CollectorCard :collector="collector" />
         </div>
       </v-flex>
-      <v-flex xs4 pl-2 class="scroll-list">
+      <v-flex xs4 pl-4 pr-3 class="scroll-list">
         <CircuitsSelect :building="building" />
       </v-flex>
     </v-layout>
@@ -42,7 +42,7 @@ export default {
 
 <style scoped>
 .scroll-list {
-  height: 91vh;
+  height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
