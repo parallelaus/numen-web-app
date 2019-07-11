@@ -15,6 +15,12 @@
                     {{ collector.serial_number }}
                   </span>
                 </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn small flat color="primary">
+                    Update
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-flex>
             <v-flex xs8 sm9>
@@ -60,14 +66,15 @@
                             v-if="getPortCircuit(port)"
                             class="blue lighten-4"
                           >
-                            <v-container fluid pa-1>
-                              <v-layout row-wrap>
-                                <v-flex xs11>
-                                  <v-card-text primary-title class="pa-0">
+                            <v-card-text primary-title class="pa-0">
+                              <v-container fluid pa-1>
+                                <v-layout row-wrap>
+                                  <v-flex xs11>
                                     <span
                                       class="subheading font-weight-medium ma-0 pa-0"
                                     >
-                                      {{ getPortCircuit(port).name }} - {{
+                                      {{ getPortCircuit(port).name }} -
+                                      {{
                                         phaseColour(
                                           getPortCircuit(port).phase_id
                                         ).label
@@ -77,7 +84,10 @@
                                       {{ getPortCircuit(port).location }}
                                     </span> -->
                                     <br />
-                                    <span v-if="!getPortCircuit(port).ct_number" class="pl-2">
+                                    <span
+                                      v-if="!getPortCircuit(port).ct_number"
+                                      class="pl-2"
+                                    >
                                       <span class="caption font-weight-medium">
                                         CT:
                                       </span>
@@ -85,15 +95,23 @@
                                         {{ getPortCircuit(port).ct_type_id }}A
                                       </span>
                                     </span>
-                                    <span v-if="getPortCircuit(port).ct_number" class="pl-2">
+                                    <span
+                                      v-if="getPortCircuit(port).ct_number"
+                                      class="pl-2"
+                                    >
                                       <span class="caption font-weight-medium">
                                         CT:
                                       </span>
                                       <span class="caption font-weight-thin">
-                                        {{ getPortCircuit(port).ct_number }} ({{ getPortCircuit(port).ct_type_id }}A)
+                                        {{ getPortCircuit(port).ct_number }} ({{
+                                          getPortCircuit(port).ct_type_id
+                                        }}A)
                                       </span>
                                     </span>
-                                    <span v-if="getPortCircuit(port).breaker_size" class="pl-2">
+                                    <span
+                                      v-if="getPortCircuit(port).breaker_size"
+                                      class="pl-2"
+                                    >
                                       <span class="caption font-weight-medium">
                                         Breaker Size:
                                       </span>
@@ -101,7 +119,10 @@
                                         {{ getPortCircuit(port).breaker_size }}A
                                       </span>
                                     </span>
-                                    <span v-if="getPortCircuit(port).cable_size" class="pl-2">
+                                    <span
+                                      v-if="getPortCircuit(port).cable_size"
+                                      class="pl-2"
+                                    >
                                       <span class="caption font-weight-medium">
                                         Cable:
                                       </span>
@@ -109,26 +130,26 @@
                                         {{ getPortCircuit(port).cable_size }}
                                       </span>
                                     </span>
-                                  </v-card-text>
-                                </v-flex>
-                                <v-flex xs1 class="text-xs-right">
-                                  <v-btn
-                                    ma-0
-                                    small
-                                    icon
-                                    @click="
-                                      disconnectCircuit(getPortCircuit(port).id)
-                                    "
-                                  >
-                                    <v-icon color="grey darken-2">
-                                      delete_outline
-                                    </v-icon>
-                                  </v-btn>
-                                  </span></span>
-                                  </v-card-text>
-                                </v-flex>
-                              </v-layout>
-                            </v-container>
+                                  </v-flex>
+                                  <v-flex xs1 class="text-xs-right">
+                                    <v-btn
+                                      ma-0
+                                      small
+                                      icon
+                                      @click="
+                                        disconnectCircuit(
+                                          getPortCircuit(port).id
+                                        )
+                                      "
+                                    >
+                                      <v-icon color="grey darken-2">
+                                        delete_outline
+                                      </v-icon>
+                                    </v-btn>
+                                  </v-flex>
+                                </v-layout>
+                              </v-container>
+                            </v-card-text>
                           </v-card>
                         </v-flex>
                       </v-layout>

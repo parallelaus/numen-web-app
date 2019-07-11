@@ -1,6 +1,11 @@
 <template>
   <v-container fluid pa-0>
     <v-layout row wrap>
+      <v-flex xs6 pl-0>
+        <CollectorForm :building="building" />
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
       <v-flex xs8 class="scroll-list">
         <div v-for="collector in collectors" :key="collector.serial_number">
           <CollectorCard :collector="collector" />
@@ -17,11 +22,13 @@
 import { mapGetters } from 'vuex'
 import CollectorCard from '@/components/collector/CollectorCard'
 import CircuitsSelect from '@/components/circuit/CircuitsSelect'
+import CollectorForm from '@/components/collector/CollectorForm'
 
 export default {
   components: {
     CollectorCard,
-    CircuitsSelect
+    CircuitsSelect,
+    CollectorForm
   },
   props: {
     building: {

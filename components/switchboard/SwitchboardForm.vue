@@ -38,7 +38,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn color="primary" flat @click="dialog = false">
-          Close
+          Cancel
         </v-btn>
         <v-btn
           color="primary"

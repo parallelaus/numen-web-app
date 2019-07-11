@@ -55,7 +55,7 @@ export const mutations = {
       })
     }
   },
-
+  // TODO: Update local storage when entities are updated
   ADD_ENTITY(state, entity) {
     state[entity.collection].push(entity.entity)
   },
@@ -188,6 +188,21 @@ export const actions = {
       circuit
     )
     console.log(response)
+  },
+
+  /**
+   * Adds a collector to an existing building
+   *
+   * @param param0
+   * @param data
+   */
+  async addBuildingCollector({ commit }, data) {
+    console.log(
+      'adding collector ' +
+        data.collector.serial_number +
+        ' to building ' +
+        data.buildingId
+    )
   },
 
   /**

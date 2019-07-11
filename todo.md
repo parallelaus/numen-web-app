@@ -2,8 +2,9 @@
 
 - Global error handling for server errors such as server not available or 500 errors
 - Add entity description as tooltips
-- Implement generic localStorage caching system to allow loading of data from local storage if available. Needs to also update localStorage when API is updated - event/watch type of solution
+- look at event/watch option for updating local storage?
 
+- Implement generic localStorage caching system to allow loading of data from local storage if available. Needs to also update localStorage when API is updated - event/watch type of solution - DONE
 - Store/Retrieve types from local storage and only load from API when not available - DONE
 - Log out user and show login screen whenever an unauthorised resonse is received from API - DONE
 - Remove redundant methods where method is direct copy of getter method e.g. CircuitCard phaseColour. See default view where hasRole is called with no additional method - DONE
@@ -12,15 +13,17 @@
 
 - Get user roles from the API
 - Implement refresh token
+
 - Auto-login and token refresh - DONE
 
 # Site
 
 - Add ct size to circuit/device data to be able to automatically set when connecting to a collector
-- rename ct_number to ct_cable_number
+- rename ct_number to ct_cable_number (check API)
 - Add pre-defined areas to location field as options, but still allow user to enter new value
 - handle sub-switchboards
 - Change delete call to destroy for switchboards and buildings to ensure all data is deleted
+- Implement add/update/delete collector API calls and state updates
 
 - Get areas from DB - DONE
 - Get phase colours from DB - DONE
