@@ -73,12 +73,12 @@ export default {
         route: '/',
         access: 'siteData.view'
       },
-      {
-        icon: 'save',
-        text: 'Data',
-        route: '/',
-        access: 'siteData.view'
-      },
+      // {
+      //   icon: 'save',
+      //   text: 'Data',
+      //   route: '/',
+      //   access: 'siteData.view'
+      // },
       {
         icon: 'location_city',
         text: 'Installations',

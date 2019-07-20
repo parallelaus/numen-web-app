@@ -80,6 +80,14 @@
                                         ).label
                                       }}
                                     </span>
+                                    <span
+                                      v-if="$store.state.techMode"
+                                      class="caption font-weight-thin"
+                                    >
+                                      &nbsp;(Circuit ID:
+                                      {{ getPortCircuit(port).id }})
+                                    </span>
+
                                     <!-- <span class="caption font-weight-thin pl-4">
                                       {{ getPortCircuit(port).location }}
                                     </span> -->

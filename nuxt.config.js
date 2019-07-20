@@ -9,7 +9,7 @@ export default {
   },
 
   head: {
-    title: 'Numen Installer',
+    title: 'Numen',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -35,12 +35,17 @@ export default {
 
   modules: ['@nuxtjs/axios', '@nuxtjs/dotenv', 'cookie-universal-nuxt'],
 
-  plugins: ['@/plugins/axios', '@/plugins/vuetify', '@/plugins/api'],
+  plugins: [
+    '@/plugins/axios',
+    '@/plugins/vuetify',
+    '@/plugins/api',
+    '@plugins/vue-chart'
+  ],
 
   axios: {},
 
   env: {
-    OAUTH_CLIENT_ID: '23498274567239',
+    OAUTH_CLIENT_ID: 'numen_web_app',
     OAUTH_CLIENT_SECRET: '461fd78e-8eb8-4eb2-a6aa-ae3ee69ea01c'
   },
 

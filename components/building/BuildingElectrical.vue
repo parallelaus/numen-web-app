@@ -54,7 +54,7 @@
           </v-flex>
         </v-layout>
       </div>
-      <v-container fluid grid-list-md pa-0 pb-3>
+      <v-container fluid grid-list-sm pa-0 pb-3>
         <v-layout v-if="getSwitchboardDevices(switchboard.id)" column>
           <v-flex
             v-for="(device, idx) in getSwitchboardDevices(switchboard.id)"

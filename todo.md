@@ -11,6 +11,7 @@
 
 # Authentication
 
+- Deal with situation where token expired and data can not be loaded on refresh. Basically loading data before user login. Might have to create a separate login page.
 - Get user roles from the API
 - Implement refresh token
 

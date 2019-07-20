@@ -19,6 +19,9 @@
       <v-list-tile slot="activator">
         <v-list-tile-title>
           {{ switchboard.name }}
+          <span v-if="$store.state.techMode" class="caption font-weight-thin">
+            &nbsp;(Switchboard ID: {{ switchboard.id }})
+          </span>
         </v-list-tile-title>
       </v-list-tile>
       <v-card
@@ -35,6 +38,12 @@
               <div class="pa-0">
                 <span class="subheading font-weight-bold pa-0">
                   {{ device.name }}
+                </span>
+                <span
+                  v-if="$store.state.techMode"
+                  class="caption font-weight-thin"
+                >
+                  &nbsp;(Device ID: {{ device.id }})
                 </span>
                 <p class="caption ma-0 pa-0 pl-2">
                   {{ device.location }}
@@ -81,6 +90,12 @@
                       <span class="caption font-weight-thin">
                         {{ circuit.ct_number }} ({{ circuit.ct_type_id }}A)
                       </span>
+                    </span>
+                    <span
+                      v-if="$store.state.techMode"
+                      class="caption font-weight-thin"
+                    >
+                      &nbsp;(Circuit ID: {{ circuit.id }})
                     </span>
                   </v-card-title>
                 </v-card>

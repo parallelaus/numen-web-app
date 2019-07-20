@@ -10,7 +10,7 @@
 
 <script>
 import SiteCard from '@/components/site/SiteCard.vue'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   head() {
@@ -22,8 +22,8 @@ export default {
     SiteCard
   },
   computed: {
-    ...mapGetters({
-      sites: 'site/sites'
+    ...mapState({
+      sites: state => state.site.sites
     })
   },
   async fetch({ store }) {

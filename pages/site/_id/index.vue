@@ -11,7 +11,7 @@
             <p class="ma-0">{{ site.address }}</p>
           </span>
         </v-flex>
-        <v-flex xs1 pt-0  />
+        <v-flex xs1 pt-0 />
       </v-layout>
     </v-container>
     <v-container fluid pa-0 px-2>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import BuildingTabs from '@/components/building/BuildingTabs.vue'
 import BuildingForm from '@/components/building/BuildingForm.vue'
 
@@ -69,9 +69,13 @@ export default {
         this.$store.commit('site/SET_VIEW', view)
       }
     },
-    ...mapGetters({
-      site: 'site/site',
-      buildings: 'site/buildings'
+    // ...mapGetters({
+    //   site: 'site/site',
+    //   buildings: 'site/buildings'
+    // })
+    ...mapState({
+      site: state => state.site.site,
+      buildings: state => state.site.buildings
     })
   },
   async fetch({ store, params }) {

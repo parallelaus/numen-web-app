@@ -1,18 +1,20 @@
 <template>
   <div>
-    <v-menu offset-y>
+    <v-menu open-on-hover offset-y>
       <v-btn slot="activator" color="primary" outline small>
         Add Circuits to {{ switchboard.name }}
       </v-btn>
-      <v-list>
-        <v-list-tile
-          v-for="(item, index) in addDeviceOptions"
-          :key="index"
-          @click="initDialog(item)"
-        >
-          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
+      <no-ssr>
+        <v-list>
+          <v-list-tile
+            v-for="(item, index) in addDeviceOptions"
+            :key="index"
+            @click="initDialog(item)"
+          >
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </no-ssr>
     </v-menu>
     <v-dialog v-model="dialog" persistent max-width="800px">
       <v-card>
