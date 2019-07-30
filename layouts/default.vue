@@ -20,7 +20,7 @@ import { mapGetters } from 'vuex'
 export default {
   head() {
     return {
-      titleTemplate: '%s - Numen Installer',
+      titleTemplate: '%s - NUMEN',
       title: 'Login',
       meta: [
         {

@@ -1,5 +1,5 @@
 {
-  "name": "numen-installer",
+  "name": "numen-web-app",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",

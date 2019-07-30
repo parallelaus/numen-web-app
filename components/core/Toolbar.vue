@@ -70,7 +70,7 @@ export default {
       {
         icon: 'dashboard',
         text: 'Dashboard',
-        route: '/',
+        route: '/dashboard',
         access: 'siteData.view'
       },
       // {

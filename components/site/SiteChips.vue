@@ -1,6 +1,6 @@
 <template>
   <v-layout row>
-    <v-flex xs11>
+    <v-flex xs11 pa-0>
       <v-combobox
         v-model="selectedSites"
         :items="sites"
@@ -11,7 +11,7 @@
         clearable
         solo
         multiple
-        @change="requiresUpdate = true"
+        @change="selectSite()"
       >
         <template v-slot:selection="data">
           <v-chip
@@ -26,7 +26,7 @@
         </template>
       </v-combobox>
     </v-flex>
-    <v-flex xs1>
+    <v-flex xs1 pa-0>
       <v-btn
         color="primary"
         icon
@@ -40,7 +40,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
+import { setItem, getItem } from '@/utils/local-storage'
 
 export default {
   data() {
@@ -55,16 +56,24 @@ export default {
       sites: state => state.site.sites
     })
   },
-
+  mounted() {
+    this.selectedSites = getItem('dashboard_sites') // get selected sites from local storage
+    const sites = JSON.parse(JSON.stringify(this.selectedSites))
+    this.$emit('update', sites)
+  },
   methods: {
     updateDashboard() {
-      console.log('updating dashboard')
-      console.log(this.selectedSites)
+      setItem('dashboard_sites', this.selectedSites)
+      const sites = JSON.parse(JSON.stringify(this.selectedSites))
+      this.$emit('update', sites)
       this.requiresUpdate = false
     },
     deselectSite(item) {
       this.selectedSites.splice(this.selectedSites.indexOf(item), 1)
       this.selectedSites = [...this.selectedSites]
+      this.requiresUpdate = true
+    },
+    selectSite() {
       this.requiresUpdate = true
     }
   }

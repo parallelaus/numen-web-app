@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Line, Bar } from 'vue-chartjs'
+import { Line, Bar, Pie } from 'vue-chartjs'
 
 Vue.component('LineChart', {
   extends: Line,
@@ -11,6 +11,14 @@ Vue.component('LineChart', {
 
 Vue.component('BarChart', {
   extends: Bar,
+  props: ['data', 'options'],
+  mounted() {
+    this.renderChart(this.data, this.options)
+  }
+})
+
+Vue.component('PieChart', {
+  extends: Pie,
   props: ['data', 'options'],
   mounted() {
     this.renderChart(this.data, this.options)

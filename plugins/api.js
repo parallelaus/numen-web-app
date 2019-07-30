@@ -1,6 +1,7 @@
 import genericApiGenerator from '@/api'
 import authApi from '@/api/auth'
 import siteApi from '@/api/site'
+import statsApi from '@/api/stats'
 import types from '@/api/types'
 
 /**
@@ -30,4 +31,7 @@ export default (ctx, inject) => {
 
   // System types and categories
   inject('types', types(ctx.$axios))
+
+  // Stats API
+  inject('stats', statsApi(ctx.$axios))
 }

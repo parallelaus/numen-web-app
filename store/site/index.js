@@ -227,17 +227,9 @@ export const actions = {
 }
 
 export const getters = {
-  // sites: state => {
-  //   return state.sites
-  // },
-
-  // site: state => {
-  //   return state.site
-  // },
-
-  // buildings: state => {
-  //   return state.buildings
-  // },
+  siteById: state => site_id => {
+    return state.sites.find(site => site.id == site_id)
+  },
 
   fedBySwitchboard: state => switchboard_id => {
     return fedBySwitchboard(state, switchboard_id)
