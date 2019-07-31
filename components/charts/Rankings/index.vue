@@ -14,6 +14,7 @@
             :items="tableData"
             class="elevation-1"
             hide-actions
+            :pagination.sync="pagination"
           >
             <template v-slot:items="props">
               <td>{{ props.item.name }}</td>
@@ -96,7 +97,13 @@ export default {
         { text: '%', value: 'consumption_percent', align: 'right' }
         // { text: 'Cost ($)', value: 'cost', align: 'right' },
         // { text: '%', value: 'cost_percentage', align: 'right' }
-      ]
+      ],
+
+      pagination: {
+        sortBy: 'consumption_kwh',
+        descending: true,
+        rowsPerPage: -1
+      }
     }
   },
   computed: {
