@@ -44,11 +44,7 @@
                           sm11
                           d-flex
                           @drop="
-                            connectCircuit(
-                              $event,
-                              collector.serial_number,
-                              port
-                            )
+                            dropCircuit($event, collector, port)
                             circuitDragOut($event)
                           "
                           @dragover.prevent="circuitDragOver($event)"
@@ -65,77 +61,100 @@
                           <v-card
                             v-if="getPortCircuit(port)"
                             class="blue lighten-4"
+                            hover
+                            draggable
+                            @dragstart="
+                              pickUpEntity($event, getPortCircuit(port), 'move')
+                            "
                           >
                             <v-card-text primary-title class="pa-0">
                               <v-container fluid pa-1>
                                 <v-layout row-wrap>
-                                  <v-flex xs11>
-                                    <span
-                                      class="subheading font-weight-medium ma-0 pa-0"
-                                    >
-                                      {{ getPortCircuit(port).name }} -
-                                      {{
-                                        phaseColour(
-                                          getPortCircuit(port).phase_id
-                                        ).label
-                                      }}
+                                  <v-flex xs1 align-self-center>
+                                    <span>
+                                      <v-icon>drag_indicator</v-icon>
                                     </span>
-                                    <span
-                                      v-if="$store.state.techMode"
-                                      class="caption font-weight-thin"
-                                    >
-                                      &nbsp;(Circuit ID:
-                                      {{ getPortCircuit(port).id }})
-                                    </span>
+                                  </v-flex>
+                                  <v-flex xs10>
+                                    <span>
+                                      <span
+                                        class="subheading font-weight-medium ma-0 pa-0"
+                                      >
+                                        {{ getPortCircuit(port).name }} -
+                                        {{
+                                          phaseColour(
+                                            getPortCircuit(port).phase_id
+                                          ).label
+                                        }}
+                                      </span>
+                                      <span
+                                        v-if="$store.state.techMode"
+                                        class="caption font-weight-thin"
+                                      >
+                                        &nbsp;(Circuit ID:
+                                        {{ getPortCircuit(port).id }})
+                                      </span>
 
-                                    <!-- <span class="caption font-weight-thin pl-4">
-                                      {{ getPortCircuit(port).location }}
-                                    </span> -->
-                                    <br />
-                                    <span
-                                      v-if="!getPortCircuit(port).ct_number"
-                                      class="pl-2"
-                                    >
-                                      <span class="caption font-weight-medium">
-                                        CT:
+                                      <!-- <span class="caption font-weight-thin pl-4">
+                                        {{ getPortCircuit(port).location }}
+                                      </span> -->
+                                      <br />
+                                      <span
+                                        v-if="!getPortCircuit(port).ct_number"
+                                        class="pl-2"
+                                      >
+                                        <span
+                                          class="caption font-weight-medium"
+                                        >
+                                          CT:
+                                        </span>
+                                        <span class="caption font-weight-thin">
+                                          {{ getPortCircuit(port).ct_type_id }}A
+                                        </span>
                                       </span>
-                                      <span class="caption font-weight-thin">
-                                        {{ getPortCircuit(port).ct_type_id }}A
+                                      <span
+                                        v-if="getPortCircuit(port).ct_number"
+                                        class="pl-2"
+                                      >
+                                        <span
+                                          class="caption font-weight-medium"
+                                        >
+                                          CT:
+                                        </span>
+                                        <span class="caption font-weight-thin">
+                                          {{ getPortCircuit(port).ct_number }}
+                                          ({{
+                                            getPortCircuit(port).ct_type_id
+                                          }}A)
+                                        </span>
                                       </span>
-                                    </span>
-                                    <span
-                                      v-if="getPortCircuit(port).ct_number"
-                                      class="pl-2"
-                                    >
-                                      <span class="caption font-weight-medium">
-                                        CT:
+                                      <span
+                                        v-if="getPortCircuit(port).breaker_size"
+                                        class="pl-2"
+                                      >
+                                        <span
+                                          class="caption font-weight-medium"
+                                        >
+                                          Breaker Size:
+                                        </span>
+                                        <span class="caption font-weight-thin">
+                                          {{
+                                            getPortCircuit(port).breaker_size
+                                          }}A
+                                        </span>
                                       </span>
-                                      <span class="caption font-weight-thin">
-                                        {{ getPortCircuit(port).ct_number }} ({{
-                                          getPortCircuit(port).ct_type_id
-                                        }}A)
-                                      </span>
-                                    </span>
-                                    <span
-                                      v-if="getPortCircuit(port).breaker_size"
-                                      class="pl-2"
-                                    >
-                                      <span class="caption font-weight-medium">
-                                        Breaker Size:
-                                      </span>
-                                      <span class="caption font-weight-thin">
-                                        {{ getPortCircuit(port).breaker_size }}A
-                                      </span>
-                                    </span>
-                                    <span
-                                      v-if="getPortCircuit(port).cable_size"
-                                      class="pl-2"
-                                    >
-                                      <span class="caption font-weight-medium">
-                                        Cable:
-                                      </span>
-                                      <span class="caption font-weight-thin">
-                                        {{ getPortCircuit(port).cable_size }}
+                                      <span
+                                        v-if="getPortCircuit(port).cable_size"
+                                        class="pl-2"
+                                      >
+                                        <span
+                                          class="caption font-weight-medium"
+                                        >
+                                          Cable:
+                                        </span>
+                                        <span class="caption font-weight-thin">
+                                          {{ getPortCircuit(port).cable_size }}
+                                        </span>
                                       </span>
                                     </span>
                                   </v-flex>
@@ -168,6 +187,36 @@
             </v-flex>
           </v-layout>
         </v-container>
+        <v-dialog v-model="confirmDropDialog" max-width="350">
+          <v-card>
+            <v-card-title class="headline">
+              {{ confirmHeaderText }}
+            </v-card-title>
+            <v-card-text v-if="confirmMessageText">
+              {{ confirmMessageText }}
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="error"
+                flat
+                small
+                :loading="confirmLoading"
+                @click="confirmDrop"
+              >
+                {{ confirmButtonText }}
+              </v-btn>
+              <v-spacer />
+              <v-btn
+                color="primary"
+                flat
+                small
+                @click="confirmDropDialog = false"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-flex>
     </v-layout>
   </v-container>
@@ -183,6 +232,14 @@ export default {
       required: true
     }
   },
+  data: () => ({
+    confirmDropDialog: false,
+    confirmHeaderText: 'Are you sure?',
+    confirmMessageText: 'You are about to move circuit 1 to collector 4 port 7',
+    confirmButtonText: 'Move Circuit',
+    confirmLoading: false,
+    dropCircuitData: {}
+  }),
   computed: {
     ...mapGetters({
       circuitsByCollector: 'site/circuitsByCollector',
@@ -190,13 +247,13 @@ export default {
     })
   },
   methods: {
-    hoverOverCircuit(collector, port) {
-      return this.dragOverCircuit.collector == collector &&
-        this.dragOverCircuit.port == port
-        ? 'drag-over-circuit'
-        : ''
-    },
+    pickUpEntity(e, entity, action) {
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.dropEffect = 'move'
 
+      e.dataTransfer.setData('entity', JSON.stringify(entity))
+      e.dataTransfer.setData('action', action)
+    },
     getPortCircuit(port) {
       return this.circuitsByCollector(this.collector.serial_number).get(port)
     },
@@ -206,14 +263,64 @@ export default {
         circuit_id
       )
     },
-    async connectCircuit(e, collector, port) {
-      const circuit_id = e.dataTransfer.getData('circuit_id')
-      console.log(' Dropping circuit ' + circuit_id)
-      await this.$store.dispatch('site/connectCircuitToCollectorPort', {
+    async confirmDrop() {
+      this.confirmLoading = true
+      switch (this.dropCircuitData.action) {
+        case 'move':
+          await this.$store.dispatch('site/moveCircuitToCollectorPort', {
+            collector: this.dropCircuitData.collector.serial_number,
+            port: this.dropCircuitData.port,
+            circuit: this.dropCircuitData.circuit.id
+          })
+          break
+        case 'connect':
+          await this.$store.dispatch('site/connectCircuitToCollectorPort', {
+            collector: this.dropCircuitData.collector.serial_number,
+            port: this.dropCircuitData.port,
+            circuit: this.dropCircuitData.circuit.id
+          })
+          break
+      }
+      this.confirmLoading = false
+      this.confirmDropDialog = false
+    },
+    dropCircuit(e, collector, port) {
+      const circuit = JSON.parse(e.dataTransfer.getData('entity'))
+      const action = e.dataTransfer.getData('action')
+
+      this.dropCircuitData = {
+        action,
+        circuit,
         collector,
-        port,
-        circuit: circuit_id
-      })
+        port
+      }
+
+      switch (this.dropCircuitData.action) {
+        case 'move':
+          this.confirmMessageText =
+            'Move ' +
+            circuit.name +
+            ' - ' +
+            this.phaseColour(circuit.phase_id).label +
+            ' to Collector ' +
+            collector.name +
+            ' Port ' +
+            port
+          this.confirmDropDialog = true
+          break
+        case 'connect':
+          this.confirmMessageText =
+            'Connect ' +
+            circuit.name +
+            ' - ' +
+            this.phaseColour(circuit.phase_id).label +
+            ' to Collector ' +
+            collector.name +
+            ' Port ' +
+            port
+          this.confirmDrop() // user not asked to confirm connecting a circuit, conrifm called directly
+          break
+      }
     },
     circuitDragOver(e) {
       e.toElement.classList.add('drag-over-circuit')

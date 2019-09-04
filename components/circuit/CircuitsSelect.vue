@@ -30,7 +30,7 @@
         class="ma-2 pr-1 pb-1"
         color="blue lighten-3"
         flat
-        @dragstart.self="pickUpDevice($event, device.id)"
+        @dragstart.self="pickUpEntity($event, device, 'connect')"
       >
         <v-layout row wrap>
           <v-flex xs12>
@@ -66,10 +66,10 @@
                   class="ma-1"
                   draggable
                   hover
-                  @dragstart="pickUpCircuit($event, circuit.id)"
+                  @dragstart="pickUpEntity($event, circuit, 'connect')"
                 >
                   <v-card-title class="pa-0 py-2">
-                    <span>
+                    <span class="pr-3">
                       <v-icon>drag_indicator</v-icon>
                     </span>
                     <span class="subheading font-weight-medium">
@@ -148,17 +148,12 @@ export default {
         )
       })
     },
-    pickUpCircuit(e, circuit_id) {
+    pickUpEntity(e, entity, action) {
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.dropEffect = 'move'
 
-      e.dataTransfer.setData('circuit_id', circuit_id)
-    },
-    pickUpDevice(e, device_id) {
-      e.dataTransfer.effectAllowed = 'move'
-      e.dataTransfer.dropEffect = 'move'
-
-      e.dataTransfer.setData('device_id', device_id)
+      e.dataTransfer.setData('entity', JSON.stringify(entity))
+      e.dataTransfer.setData('action', action)
     }
   }
 }

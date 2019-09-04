@@ -40,15 +40,6 @@
       </v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
-        <v-btn
-          v-if="requestAccess('techMode.access')"
-          icon
-          @click="toggleTechMode"
-        >
-          <v-icon :class="techModeClass" small class="white--text">
-            build
-          </v-icon>
-        </v-btn>
         <v-btn icon router to="/" @click="logout">
           <v-icon>
             exit_to_app
@@ -88,11 +79,6 @@ export default {
     ]
   }),
   computed: {
-    techModeClass() {
-      return {
-        'grey--text darken-2': !this.$store.state.techMode
-      }
-    },
     userLinks() {
       return this.links.filter(link => this.requestAccess(link.access))
     }
@@ -100,9 +86,6 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('user/logout')
-    },
-    toggleTechMode() {
-      this.$store.commit('TOGGLE_TECH_MODE')
     }
   }
 }

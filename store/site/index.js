@@ -3,7 +3,8 @@ import {
   setItemInArray,
   getItemFromArray,
   getItem,
-  setItem
+  setItem,
+  removeItem
 } from '@/utils/local-storage'
 
 export const state = () => ({
@@ -59,6 +60,26 @@ export const mutations = {
   ADD_ENTITY(state, entity) {
     state[entity.collection].push(entity.entity)
   },
+
+  CLEAR_SITES(state) {
+    state.sites = []
+    state.site = {}
+    state.buildings = []
+    state.sites = []
+    state.buildings = []
+    state.switchboards = []
+    state.circuits = []
+    state.devices = []
+    state.collectors = []
+    state.country = {}
+    state.phase_colours = []
+    state.areas = []
+    state.collectors_ports = []
+
+    removeItem('sites')
+    removeItem('site_map')
+  },
+
   UPDATE_ENTITY(state, entity) {
     const idx = state[entity.collection].findIndex(
       item => item.id == entity.entity.id
@@ -223,6 +244,17 @@ export const actions = {
   async disconnectCircuitFromCollectorPort({ commit }, circuit_id) {
     // TODO: Disconnect circuit API call
     commit('DISCONNECT_CIRCUIT', circuit_id)
+  },
+
+  /**
+   * Move circuit to a different collector port
+   *
+   * @param { collector, port, circuit } connection
+   */
+  async moveCircuitToCollectorPort({ commit }, connection) {
+    // TODO: Connect circuit API call
+    commit('DISCONNECT_CIRCUIT', connection.circuit)
+    commit('CONNECT_CIRCUIT', connection)
   }
 }
 

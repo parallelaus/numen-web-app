@@ -8,13 +8,15 @@
       <v-content>
         <nuxt />
       </v-content>
+      <Footer />
     </div>
   </v-app>
 </template>
 
 <script>
-import Toolbar from '@/components/core/Toolbar.vue'
-import Login from '@/components/core/Login.vue'
+import Toolbar from '@/components/core/Toolbar'
+import Login from '@/components/core/Login'
+import Footer from '@/components/core/Footer'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -33,7 +35,8 @@ export default {
   },
   components: {
     Toolbar,
-    Login
+    Login,
+    Footer
   },
   computed: {
     ...mapGetters({

@@ -84,6 +84,10 @@ export function setItem(storageKey, item, overwriteKey = true) {
   return true
 }
 
+export function removeItem(storageKey) {
+  localStorage.removeItem(storageKey)
+}
+
 export function getItem(storageKey) {
   if (!storageAvailable()) return undefined
   try {
