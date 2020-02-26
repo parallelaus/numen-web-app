@@ -20,6 +20,9 @@
           <v-layout pa-0 mt-3>
             <v-flex xs6 pt-1 pl-2>
               <v-btn-toggle v-model="view" class="transparent">
+                <v-btn flat small value="site">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </v-btn>
                 <v-btn flat small value="electrical">
                   Electrical
                 </v-btn>

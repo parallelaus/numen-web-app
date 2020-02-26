@@ -3,6 +3,7 @@
 - Global error handling for server errors such as server not available or 500 errors
 - Add entity description as tooltips
 - look at event/watch option for updating local storage?
+- Investigate LocalForage to replace local storage https://localforage.github.io/localForage/
 
 - Implement generic localStorage caching system to allow loading of data from local storage if available. Needs to also update localStorage when API is updated - event/watch type of solution - DONE
 - Store/Retrieve types from local storage and only load from API when not available - DONE

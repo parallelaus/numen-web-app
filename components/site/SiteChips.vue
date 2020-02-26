@@ -58,8 +58,12 @@ export default {
   },
   mounted() {
     this.selectedSites = getItem('dashboard_sites') // get selected sites from local storage
-    const sites = JSON.parse(JSON.stringify(this.selectedSites))
-    this.$emit('update', sites)
+    if (this.selectedSites == null) {
+      this.$emit('update', [])
+    } else {
+      const sites = JSON.parse(JSON.stringify(this.selectedSites))
+      this.$emit('update', sites)
+    }
   },
   methods: {
     updateDashboard() {

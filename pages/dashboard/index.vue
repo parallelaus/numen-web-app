@@ -4,13 +4,13 @@
       <v-flex>
         <SiteChips @update="updateSites($event)" />
       </v-flex>
-      <v-flex>
+      <v-flex v-if="sitesSelected">
         <SiteConsumptionChart
           :data="consumptionChartData"
           :loading="siteStatsLoading"
         />
       </v-flex>
-      <v-flex>
+      <v-flex v-if="sitesSelected">
         <RankingsChart :data="rankingChartData" :loading="siteStatsLoading" />
       </v-flex>
     </v-layout>
@@ -37,7 +37,8 @@ export default {
   },
   data() {
     return {
-      siteStatsLoading: true
+      siteStatsLoading: true,
+      sitesSelected: false
     }
   },
   computed: {
@@ -59,15 +60,19 @@ export default {
   },
   methods: {
     async updateSites(sites) {
-      console.log('Update dashboard for selected site(s)')
-      this.siteStatsLoading = true
-      const params = {
-        period: '1m',
-        from: '2019-01'
+      if (sites.length > 0) {
+        this.siteStatsLoading = true
+        const params = {
+          period: '1m',
+          from: '2019-01'
+        }
+        await this.$store.dispatch('stats/fetchSiteStats', { sites, params })
+        this.sites = sites
+        this.sitesSelected = true
+        this.siteStatsLoading = false
+      } else {
+        this.sitesSelected = false
       }
-      await this.$store.dispatch('stats/fetchSiteStats', { sites, params })
-      this.sites = sites
-      this.siteStatsLoading = false
     }
   }
 }
