@@ -1,12 +1,17 @@
 {
   "name": "numen-web-app",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Anton Menkveld",
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --port 3333",
     "build": "nuxt build",
     "start": "nuxt start",
+    "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
-    "unit": "jest"
+    "unit": "jest",
+    "heroku-postbuild": "yarn build"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
