@@ -49,6 +49,9 @@ export default {
   axios: {},
 
   env: {
+    API_URL: process.env.API_URL,
+    DATA_URL: process.env.DATA_URL,
+    OAUTH_URL: process.env.OAUTH_URL,
     OAUTH_CLIENT_ID: 'numen_web_app',
     OAUTH_CLIENT_SECRET: '461fd78e-8eb8-4eb2-a6aa-ae3ee69ea01c'
   },

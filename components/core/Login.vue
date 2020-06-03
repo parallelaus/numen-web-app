@@ -54,6 +54,9 @@ export default {
     loading: false,
     loginError: false
   }),
+  created() {
+    console.log(process.env)
+  },
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
