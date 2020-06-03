@@ -10,6 +10,7 @@ export default $axios => ({
    * @param {username: string, password: string} credentials
    */
   token(credentials) {
+    console.log(process.env.OAUTH_URL)
     return $axios.$post(`${process.env.OAUTH_URL}/token`, {
       grant_type: 'password',
       client_id: process.env.OAUTH_CLIENT_ID,

@@ -33,7 +33,11 @@ export default {
 
   css: ['~/assets/style/app.styl'],
 
-  modules: ['@nuxtjs/axios', '@nuxtjs/dotenv', 'cookie-universal-nuxt'],
+  modules: [
+    '@nuxtjs/axios',
+    ['@nuxtjs/dotenv', { systemvars: true }],
+    'cookie-universal-nuxt'
+  ],
 
   plugins: [
     '@/plugins/axios',
