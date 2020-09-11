@@ -44,14 +44,34 @@ exports[`Component: core/Login renders correctly 1`] = `
               <v-text-field-stub
                 label="Email Address"
                 prepend-icon="person"
-                rules="v => v.length > 0 || 'Please enter your email address'"
+                rules="v => {
+          /* istanbul ignore next */
+          cov_njwbaai5n.f[2]++;
+          cov_njwbaai5n.s[5]++;
+          return (
+            /* istanbul ignore next */
+            (cov_njwbaai5n.b[0][0]++, v.length > 0) ||
+            /* istanbul ignore next */
+            (cov_njwbaai5n.b[0][1]++, 'Please enter your email address')
+          );
+        }"
                 value=""
               />
                
               <v-text-field-stub
                 label="Password"
                 prepend-icon="lock"
-                rules="v => v.length > 0 || 'Please enter your password'"
+                rules="v => {
+          /* istanbul ignore next */
+          cov_njwbaai5n.f[3]++;
+          cov_njwbaai5n.s[6]++;
+          return (
+            /* istanbul ignore next */
+            (cov_njwbaai5n.b[1][0]++, v.length > 0) ||
+            /* istanbul ignore next */
+            (cov_njwbaai5n.b[1][1]++, 'Please enter your password')
+          );
+        }"
                 type="password"
                 value=""
               />
